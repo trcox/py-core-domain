@@ -61,18 +61,3 @@ class Reading(BaseObject):
  
   def __str__(self):
     return "Reading [pushed=%s, name= %s, value=%s, device=%s]" % (self.pushed, self.name, self.value, self.device)
-    
-  def __eq__(self, other):
-    if type(other) is type(self):
-        return self.__dict__ == other.__dict__
-    return False
-
-  def __ne__(self, other):
-    return not self == other
-    
-  def __hash__(self):
-    return hash(tuple(sorted(self.__dict__.items())))
-  
-  def toJSON(self):
-    return json.dumps(self, default=lambda o: o.__dict__, 
-      sort_keys=True, indent=4)

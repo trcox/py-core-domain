@@ -1,2 +1,3 @@
 from .base_object_test import BaseObjectTest
 from .described_object_test import DescribedObjectTest
+from .value_descriptor_test import ValueDescriptorTest

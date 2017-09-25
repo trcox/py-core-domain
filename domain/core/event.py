@@ -87,18 +87,3 @@ class Event(BaseObject):
  
   def __str__(self):
     return "Event [pushed=%s, device= %s, readings=%s, toString()=%s]" % (self.pushed, self.device, self.readings, super(Event, self).__str__())
-    
-  def __eq__(self, other):
-    if type(other) is type(self):
-        return self.__dict__ == other.__dict__
-    return False
-
-  def __ne__(self, other):
-    return not self == other
-    
-  def __hash__(self):
-    return hash(tuple(sorted(self.__dict__.items())))
-  
-  def toJSON(self):
-    return json.dumps(self, default=lambda o: o.__dict__, 
-      sort_keys=True, indent=4)
