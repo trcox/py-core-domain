@@ -25,7 +25,6 @@ class Event(BaseObject):
     self.pushed = pushed
     self.readings = readings
     self.device = device
-    self.updateReadingsDevice()
     
   @property
   def device(self):
@@ -53,27 +52,30 @@ class Event(BaseObject):
     self.__readings = readings
     if (self.__readings is not None):
       for r in self.__readings:
-        r.device = self.device
+        if hasattr(self, '__device'):
+          r.device = self.device
     
   def addReading(self, reading):
     if self.readings is None:
       self.readings = []
     reading.device = self.device
-    this.readings += reading
+    self.readings.append(reading)
 
   def addReadings(self, readings):
     if self.readings is None:
       self.readings = []
     for r in readings:
       r.device = self.device
-    this.readings += readings
+    self.readings.extend(readings)
     
   def removeReading(self, reading):
     if self.readings is None:
       self.readings = []
+    if reading not in self.readings:
+      return False
     return self.readings.remove(reading)
     
-  def markPushed(pushed):
+  def markPushed(self, pushed):
     self.pushed = pushed
     for reading in self.readings:
       reading.pushed = pushed

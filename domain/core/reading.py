@@ -20,20 +20,20 @@ from domain.common import BaseObject
 
 class Reading(BaseObject):
  
-  def __init__(self, value=None, name=None, pushed=None, created=None, modified=None, origin=None):
+  def __init__(self, value=None, name=None, device=None, pushed=None, created=None, modified=None, origin=None):
     super(Reading, self).__init__(created, modified, origin)
     self.pushed = pushed
     self.name = name
     self.value = value
+    self.device = device
     
   @property
-  def device(self):
-    return self.__device
+  def name(self):
+    return self.__name
     
-  @device.setter
-  def device(self, device):
-    self.__device = device
-    self.updateReadingsDevice()
+  @name.setter
+  def name(self, name):
+    self.__name = name
   
   @property
   def pushed(self):
@@ -44,46 +44,23 @@ class Reading(BaseObject):
     self.__pushed = pushed
   
   @property
-  def readings(self):
-    return self.__readings
+  def value(self):
+    return self.__value
     
-  @readings.setter
-  def readings(self, readings):
-    self.__readings = readings
-    if (self.__readings is not None):
-      for r in self.__readings:
-        r.device = self.device
+  @value.setter
+  def value(self, value):
+    self.__value = value
     
-  def addReading(self, reading):
-    if self.readings is None:
-      self.readings = []
-    reading.device = self.device
-    this.readings += reading
-
-  def addReadings(self, readings):
-    if self.readings is None:
-      self.readings = []
-    for r in readings:
-      r.device = self.device
-    this.readings += readings
+  @property
+  def device(self):
+    return self.__device
     
-  def removeReading(self, reading):
-    if self.readings is None:
-      self.readings = []
-    return self.readings.remove(reading)
-    
-  def markPushed(pushed):
-    self.pushed = pushed
-    for reading in self.readings:
-      reading.pushed = pushed
-      
-  def updateReadingsDevice(self):
-    if (self.readings is not None) and (len(self.readings) > 0):
-      for reading in self.readings:
-        reading.device = self.device
+  @device.setter
+  def device(self, device):
+    self.__device = device
  
   def __str__(self):
-    return "Reading [pushed=%s, device= %s, readings=%s, toString()=%s]" % (self.pushed, self.device, self.readings, super(Reading, self).__str__())
+    return "Reading [pushed=%s, name= %s, value=%s, device=%s]" % (self.pushed, self.name, self.value, self.device)
     
   def __eq__(self, other):
     if type(other) is type(self):
