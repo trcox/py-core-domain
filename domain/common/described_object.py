@@ -23,14 +23,14 @@ class DescribedObject(BaseObject):
   def __init__(self, description=None, created=None, modified=None, origin=None):
     super(DescribedObject, self).__init__(created, modified, origin)
     self.description = description
-    
+
   @property
   def description(self):
     return self.__description
-    
+
   @description.setter
   def description(self, description):
     self.__description = description
-    
+
   def __str__(self):
-    return "DescribedObject [description=%s, toString()=%s]" % (self.description, super(DescribedObject, self).__str__())
+    return "DescribedObject [description=%s, to_string()=%s]" % (self.description, super(DescribedObject, self).__str__())

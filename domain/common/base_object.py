@@ -19,40 +19,40 @@
 import time
 
 class BaseObject(object):
- 
-  def __init__(self, created, modified, origin):
+
+  def __init__(self, created=None, modified=None, origin=None):
     initialization_time = time.time()
     self.created = created if created is not None else initialization_time
     self.modified = modified if modified is not None else initialization_time
     self.origin = origin if origin is not None else initialization_time
-    
+
   @property
   def created(self):
     return self.__created
-    
+
   @created.setter
   def created(self, created):
     self.__created = created
-    
+
   @property
   def modified(self):
     return self.__modified
-    
+
   @modified.setter
   def modified(self, modified):
     self.__modified = modified
-    
+
   @property
   def origin(self):
     return self.__origin
-    
+
   @origin.setter
   def origin(self, origin):
     self.__origin = origin
- 
+
   def __str__(self):
     return "BaseObject [created=%s, modified=%s, origin=%s]" % (self.created, self.modified, self.origin)
-    
+
   def __eq__(self, other):
     if type(other) is type(self):
         return self.__dict__ == other.__dict__
@@ -60,15 +60,15 @@ class BaseObject(object):
 
   def __ne__(self, other):
     return not self == other
-    
+
   def __hash__(self):
     return hash(tuple(sorted(self.__dict__.items())))
-  
+
   def toJSON(self):
-    return json.dumps(self, default=lambda o: o.__dict__, 
+    return json.dumps(self, default=lambda o: o.__dict__,
       sort_keys=True, indent=4)
-      
-  def compareTo(self, input):
+
+  def compare_to(self, input):
     if(input.created > self.created):
       return 1
     else:

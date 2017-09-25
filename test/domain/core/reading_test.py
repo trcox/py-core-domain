@@ -15,52 +15,52 @@
 # @author: Tyler Cox, Dell
 # @version: 1.0.0
 #*******************************************************************************
- 
+
 import unittest
 
 from domain.core import Reading
- 
+
 class ReadingTest(unittest.TestCase):
 
   TEST_VALUE = "10"
   TEST_NAME = "Temperature"
   TEST_PUSHED = 1234
- 
+
   def setUp(self):
     self.r1 = Reading(self.TEST_NAME, self.TEST_VALUE, self.TEST_PUSHED)
     self.r2 = Reading(self.TEST_NAME, self.TEST_VALUE, self.TEST_PUSHED)
-    
-  def testChangeValueType(self):
+
+  def test_change_value_type(self):
     self.r1.value = "Foo"
     self.assertEqual("Foo", self.r1.value)
 
-  def testEqual(self):
+  def test_equal(self):
     self.assertTrue(self.r1 == self.r2, "Different readings with same values not equal")
 
-  def testEqualWithSame(self):
+  def test_equal_with_same(self):
     self.assertTrue(self.r1 == self.r1, "Same readings are not equal")
 
-  def testNotEqual(self):
+  def test_not_equal(self):
     self.r2.created = 3456
     self.assertFalse(self.r1 == self.r2, "Readings with different base values are equal")
 
-  def testEqualWithDifferentPushed(self):
+  def test_equal_with_different_pushed(self):
     self.r2.pushed = 4567
     self.assertFalse(self.r1 == self.r2, "Readings with different pushed values are equal")
 
-  def testEqualWithDifferentNames(self):
+  def test_equal_with_different_names(self):
     self.r2.name = "foo"
     self.assertFalse(self.r1 == self.r2, "Readings with different name values are equal")
 
-  def testEqualWithDifferentValues(self):
+  def test_equal_with_different_values(self):
     self.r2.value = "foo"
     self.assertFalse(self.r1 == self.r2, "Readings with different value values are equal")
 
-  def testHashCode(self):
+  def test_hash_code(self):
     self.assertTrue(self.r1.__hash__() != 0, "hashcode not hashing properly")
 
-  def testToString(self):
+  def test_to_string(self):
     str(self.r1)
-  
+
 if __name__ == "__main__":
   unittest.main()
