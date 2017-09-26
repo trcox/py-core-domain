@@ -16,113 +16,101 @@
 # @version: 1.0.0
 #******************************************************************************/
 
+import unittest
 
-import static org.junit.Assert.self.assertEqual
-import static org.junit.Assert.self.assertFalse
-import static org.junit.Assert.self.assertTrue
+from domain.common import HTTPMethod
+from domain.meta import Addressable, Protocol
 
-import org.edgexfoundry.domain.common.HTTPMethod
-import org.junit.Before
-import org.junit.Test
+class AddressableTest(unittest.TestCase):
 
-@Suppress_warnings("deprecation")
-public class AddressableTest {
+  TEST_NAME = "test_addressable"
+  TEST_HTTP_PROTOCOL = Protocol.HTTP
+  TEST_MQTT_PROTOCOL = Protocol.TCP
+  TEST_ADDR = "localhost"
+  TEST_PATH = "/pathtosomething"
+  TEST_PORT = 49888
+  TEST_PUBLISHER = "test_publisher"
+  TEST_TOPIC = "test_topic"
+  TEST_USER = "fred"
+  TEST_PASS = "password"
+  TEST_METHOD = HTTPMethod.POST
 
-  private static final String self.TEST_NAME = "test_addressable"
-  private static final Protocol self.TEST_HTTP_PROTOCOL = Protocol.HTTP
-  private static final Protocol self.TEST_MQTT_PROTOCOL = Protocol.TCP
-  private static final String self.TEST_ADDR = "localhost"
-  private static final String self.TEST_PATH = "/pathtosomething"
-  private static final int self.TEST_PORT = 49888
-  private static final String self.TEST_PUBLISHER = "test_publisher"
-  private static final String self.TEST_TOPIC = "test_topic"
-  private static final String self.TEST_USER = "fred"
-  private static final String self.TEST_PASS = "password"
-  private static final HTTPMethod self.TEST_METHOD = HTTPMethod.POST
-
-  private Addressable a, a2
-  private Addressable a_for_mQTT
-
-  @Before
   def setUp(self):
-    a = new Addressable(self.TEST_NAME, self.TEST_HTTP_PROTOCOL, self.TEST_ADDR, self.TEST_PATH, self.TEST_PORT)
-    a.set_method(self.TEST_METHOD)
-    a2 = new Addressable(self.TEST_NAME, self.TEST_HTTP_PROTOCOL, self.TEST_ADDR, self.TEST_PATH, self.TEST_PORT)
-    a2.set_method(self.TEST_METHOD)
-    a_for_mQTT = new Addressable(self.TEST_NAME, self.TEST_MQTT_PROTOCOL, self.TEST_ADDR, self.TEST_PORT, self.TEST_PUBLISHER,
-        TEST_USER, self.TEST_PASS, self.TEST_TOPIC)
-    a_for_mQTT.set_path(self.TEST_PATH)
+    self.a1 = Addressable(self.TEST_NAME, self.TEST_HTTP_PROTOCOL, self.TEST_ADDR, self.TEST_PORT, path=self.TEST_PATH, method=self.TEST_METHOD)
+    self.a2 = Addressable(self.TEST_NAME, self.TEST_HTTP_PROTOCOL, self.TEST_ADDR, self.TEST_PORT, path=self.TEST_PATH, method=self.TEST_METHOD)
+    self.a_for_mqtt = Addressable(self.TEST_NAME, self.TEST_MQTT_PROTOCOL, self.TEST_ADDR, self.TEST_PORT, self.TEST_PUBLISHER,
+        self.TEST_USER, self.TEST_PASS, self.TEST_TOPIC, path=self.TEST_PATH)
 
-  def test_get_base_uRL(self):
-    self.assertEqual("base url for addressable not correct",
-        TEST_HTTP_PROTOCOL + ":#" + self.TEST_ADDR + ":" + self.TEST_PORT, a.get_base_uRL())
+  def test_get_base_url(self):
+    self.assertEqual("%s://%s:%s" % (self.TEST_HTTP_PROTOCOL.name, self.TEST_ADDR, self.TEST_PORT), self.a1.get_base_url(), 
+        "base url for addressable not correct")
 
-  def test_get_uRL(self):
-    self.assertEqual("url for addressable not correct",
-        TEST_HTTP_PROTOCOL + ":#" + self.TEST_ADDR + ":" + self.TEST_PORT + self.TEST_PATH, a.get_uRL())
+  def test_get_url(self):
+    self.assertEqual("%s://%s:%s%s" % (self.TEST_HTTP_PROTOCOL.name, self.TEST_ADDR, self.TEST_PORT, self.TEST_PATH), self.a1.get_url(), 
+        "url for addressable not correct")
 
-  def test_get_uRLWith_topic_and_publisher(self):
-    self.assertEqual("url for addressable not correct",
-        TEST_MQTT_PROTOCOL + ":#" + self.TEST_ADDR + ":" + self.TEST_PORT + self.TEST_PATH, a_for_mQTT.get_uRL())
+  def test_get_url_with_topic_and_publisher(self):
+    self.assertEqual("%s://%s:%s%s" % (self.TEST_MQTT_PROTOCOL.name, self.TEST_ADDR, self.TEST_PORT, self.TEST_PATH), self.a_for_mqtt.get_url(), 
+        "url for addressable not correct")
 
-  def test_get_uRLWith_topic_and_no_publisher(self):
-    a_for_mQTT.set_publisher(None)
-    self.assertEqual("url for addressable not correct",
-        TEST_MQTT_PROTOCOL + ":#" + self.TEST_ADDR + ":" + self.TEST_PORT + self.TEST_TOPIC + "/" + self.TEST_PATH,
-        a_for_mQTT.get_uRL())
+  def test_get_url_with_topic_and_no_publisher(self):
+    self.a_for_mqtt.publisher = None
+    self.assertEqual("%s://%s:%s%s/%s" % (self.TEST_MQTT_PROTOCOL.name, self.TEST_ADDR, self.TEST_PORT, self.TEST_TOPIC, self.TEST_PATH), 
+        self.a_for_mqtt.get_url(), "url for addressable not correct")
 
-  def test_get_uRLWith_no_topic_and_no_publisher(self):
-    a_for_mQTT.set_publisher(None)
-    a_for_mQTT.set_topic(None)
-    self.assertEqual("url for addressable not correct",
-        TEST_MQTT_PROTOCOL + ":#" + self.TEST_ADDR + ":" + self.TEST_PORT + self.TEST_PATH, a_for_mQTT.get_uRL())
+  def test_get_url_with_no_topic_and_no_publisher(self):
+    self.a_for_mqtt.publisher = None
+    self.a_for_mqtt.topic = None
+    self.assertEqual("%s://%s:%s%s" % (self.TEST_MQTT_PROTOCOL.name, self.TEST_ADDR, self.TEST_PORT, self.TEST_PATH), self.a_for_mqtt.get_url(), 
+        "url for addressable not correct")
 
   def test_equals(self):
-    self.assertTrue(a.equals(a2), "Different addressable with same values not equal")
+    self.assertTrue(self.a1 == self.a2, "Different addressable with same values not equal")
 
   def test_equals_with_same(self):
-    self.assertTrue(a.equals(a), "Same addressable are not equal")
+    self.assertTrue(self.a1 == self.a1, "Same addressable are not equal")
 
   def test_not_equals(self):
-    a.set_created(3456_l)
-    self.assertFalse(a.equals(a2), "Addressable with different base values are equal")
+    self.a1.created = 3456
+    self.assertFalse(self.a1 == self.a2, "Addressable with different base values are equal")
 
   def test_equal_with_different_name(self):
-    a2.set_name("foo")
-    self.assertFalse(a.equals(a2), "Addressable with different names values are equal")
+    self.a2.name = "foo"
+    self.assertFalse(self.a1 == self.a2, "Addressable with different names values are equal")
 
   def test_equal_with_different_protocol(self):
-    a2.set_protocol(Protocol.MAC)
-    self.assertFalse(a.equals(a2), "Addressable with different protocol values are equal")
+    self.a2.protocol = Protocol.MAC
+    self.assertFalse(self.a1 == self.a2, "Addressable with different protocol values are equal")
 
   def test_equal_with_different_address(self):
-    a2.set_address("different_address")
-    self.assertFalse(a.equals(a2), "Addressable with different address values are equal")
+    self.a2.address = "different_address"
+    self.assertFalse(self.a1 == self.a2, "Addressable with different address values are equal")
 
   def test_equal_with_different_port(self):
-    a2.set_port(99)
-    self.assertFalse(a.equals(a2), "Addressable with different port values are equal")
+    self.a2.port = 99
+    self.assertFalse(self.a1 == self.a2, "Addressable with different port values are equal")
 
   def test_equal_with_different_publisher(self):
-    a2.set_publisher("new_pub")
-    self.assertFalse(a.equals(a2), "Addressable with different publisher values are equal")
+    self.a2.publisher = "new_pub"
+    self.assertFalse(self.a1 == self.a2, "Addressable with different publisher values are equal")
 
   def test_equal_with_different_user(self):
-    a2.set_user("newuser")
-    self.assertFalse(a.equals(a2), "Addressable with different user values are equal")
+    self.a2.user = "newuser"
+    self.assertFalse(self.a1 == self.a2, "Addressable with different user values are equal")
 
   def test_equal_with_different_password(self):
-    a2.set_password("new_pass")
-    self.assertFalse(a.equals(a2), "Addressable with different password values are equal")
+    self.a2.password = "new_pass"
+    self.assertFalse(self.a1 == self.a2, "Addressable with different password values are equal")
 
   def test_equal_with_different_topic(self):
-    a2.set_topic("new_topic")
-    self.assertFalse(a.equals(a2), "Addressable with different topic values are equal")
+    self.a2.topic = "new_topic"
+    self.assertFalse(self.a1 == self.a2, "Addressable with different topic values are equal")
 
   def test_hash_code(self):
-    self.assertTrue(a.hash_code() != 0, "hashcode not hashing properly")
+    self.assertTrue(self.a1.__hash__() != 0, "hashcode not hashing properly")
 
   def test_to_string(self):
-    a.to_string()
+    str(self.a1)
 
-}
+if __name__ == "__main__":
+  unittest.main()

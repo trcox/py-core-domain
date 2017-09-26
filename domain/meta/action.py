@@ -16,13 +16,15 @@
 # @version: 1.0.0
 #*******************************************************************************
 
-from domain.meta import Response
+from .response import Response
 
 class Action(object):
 
   def __init__(self, path=None, responses=None):
+    # path used by service for action on a device or sensor
     self.path = path
-    self.reponses = responses
+    # responses from get or put request to service
+    self.responses = responses
 
   # path used by service for action on a device or sensor
   @property
@@ -50,6 +52,8 @@ class Action(object):
   def add_response(self, response):
     if (self.responses is None):
       self.responses = []
+    if not isinstance(response, Response):
+      raise TypeError("Action response must be of type Response")
     self.responses.append(response)
 
   #*

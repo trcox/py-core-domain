@@ -16,35 +16,60 @@
 # @version: 1.0.0
 #*******************************************************************************
 
+class Asset(object):
 
-public interface Asset {
-
-  Admin_state get_admin_state()
-
-  void set_admin_state(Admin_state admin_state)
-
-  Operating_state get_operating_state()
-
-  void set_operating_state(Operating_state op_state)
-
-  String get_description()
-
-  void set_description(String description)
-
-  String get_name()
-
-  void set_name(String name)
-
-  long get_last_connected()
-
-  void set_last_connected(long last_connected)
-
-  long get_last_reported()
-
-  void set_last_reported(long last_reported)
-
-  Addressable get_addressable()
-
-  void set_addressable(Addressable addressable)
-
-}
+  @property
+  def adminState(self):
+    raise NotImplementedError()
+    
+  @adminState.setter
+  def adminState(self, adminState):
+    raise NotImplementedError()
+    
+  @property
+  def operatingState(self):
+    raise NotImplementedError()
+    
+  @operatingState.setter
+  def operatingState(self, operatingState):
+    raise NotImplementedError()
+    
+  @property
+  def description(self):
+    raise NotImplementedError()
+    
+  @description.setter
+  def description(self, description):
+    raise NotImplementedError()
+    
+  @property
+  def name(self):
+    raise NotImplementedError()
+    
+  @name.setter
+  def name(self, name):
+    raise NotImplementedError()
+    
+  @property
+  def lastConnected(self):
+    raise NotImplementedError()
+    
+  @lastConnected.setter
+  def lastConnected(self, lastConnected):
+    raise NotImplementedError()
+    
+  @property
+  def lastReported(self):
+    raise NotImplementedError()
+    
+  @lastReported.setter
+  def lastReported(self, lastReported):
+    raise NotImplementedError()
+    
+  @property
+  def addressable(self):
+    raise NotImplementedError()
+    
+  @addressable.setter
+  def addressable(self, addressable):
+    raise NotImplementedError()

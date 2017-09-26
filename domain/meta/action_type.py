@@ -16,7 +16,15 @@
 # @version: 1.0.0
 #*******************************************************************************
 
+from enum import Enum
 
-public enum Action_type {
-  PROFILE, DEVICE, SERVICE, MANAGER, SCHEDULE, SCHEDULEEVENT, ADDRESSABLE, VALUEDESCRIPTOR, PROVISIONWATCHER
-}
+class ActionType(Enum):
+  PROFILE = 1
+  DEVICE = 2
+  SERVICE = 3
+  MANAGER = 4
+  SCHEDULE = 5
+  SCHEDULEEVENT = 6
+  ADDRESSABLE = 7
+  VALUEDESCRIPTOR = 8
+  PROVISIONWATCHER = 9

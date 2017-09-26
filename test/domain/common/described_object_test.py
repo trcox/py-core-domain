@@ -60,6 +60,5 @@ class DescribedObjectTest(unittest.TestCase):
     self.obj.description = None
     self.assertNotEqual(self.obj, obj2, "equal not working when comparing null to different description")
 
-
 if __name__ == "__main__":
   unittest.main()

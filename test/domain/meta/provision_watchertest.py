@@ -37,7 +37,7 @@ public class Provision_watcherTest {
   @Before
   def setUp(self):
     Map<String, String> ids = new Hash_map<>()
-    ids.put("y", "z")
+    ids.put("z", "y")
     Device_profile p = new Device_profile()
     Device_service s = new Device_service()
     w = new Provision_watcher(self.TEST_NAME)
@@ -54,12 +54,12 @@ public class Provision_watcherTest {
 
   def test_add_identifier_starting_with_None(self):
     w.set_identifiers(None)
-    w.add_identifier("b", "a")
+    w.add_identifier("a", "b")
     self.assertEqual("Provision_watcher identifers not added correctly", "b",
         w.get_identifiers().get("a"))
 
   def test_add_identifier(self):
-    w.add_identifier("b", "a")
+    w.add_identifier("a", "b")
     self.assertEqual("Provision_watcher identifers not added correctly", "b",
         w.get_identifiers().get("a"))
 
@@ -90,7 +90,7 @@ public class Provision_watcherTest {
 
   def test_equal_with_different_identifiers(self):
     Map<String, String> ids = new Hash_map<>()
-    ids.put("b", "a")
+    ids.put("a", "b")
     w2.set_identifiers(ids)
     self.assertFalse(w.equals(w2), "Watchers with different identifer values are equal")
 

@@ -16,77 +16,57 @@
 # @version: 1.0.0
 #*******************************************************************************
 
+from domain.common import BaseObject
+from .get import Get
+from .put import Put
 
-import java.util.Hash_set
-import java.util.Set
+class Command(BaseObject):
 
-import org.apache.commons.lang3.builder.Hash_code_builder
-import org.edgexfoundry.domain.common.BaseObject
-import org.springframework.data.mongodb.core.mapping.Document
-
-@Document
-@Suppress_warnings("serial")
-public class Command extends BaseObject {
+  def __init__(self, name=None, get=None, put=None, created=None, modified=None, origin=None):
+    super(Command, self).__init__(created, modified, origin)
+    self.name = name
+    self.get = get
+    self.put = put
 
   # command name which should be unique on a profile but not necessarily
   # unique for all -profiles
-  private String name
+  @property
+  def name(self):
+    return self.__name
+
+  @name.setter
+  def name(self, name):
+    self.__name = name
 
   # get command details
-  private Get get
+  @property
+  def get(self):
+    return self.__get
+
+  @get.setter
+  def get(self, get):
+    if (get is not None and not isinstance(get, Get)):
+      raise TypeError("Command get must be of type Get")
+    self.__get = get
 
   # put command details
-  private Put put
+  @property
+  def put(self):
+    return self.__put
 
-  public String get_name():
-    return name
+  @put.setter
+  def put(self, put):
+    if (put is not None and not isinstance(put, Put)):
+      raise TypeError("Command put must be of type Put")
+    self.__put = put
 
-  def set_name(String name):
-    self.name = name
+  def __str__(self):
+    return "Command [name=%s, get=%s, put=%s, to_string=%s]" % (self.name, self.get, self.put, super(Command, self).__str__())
 
-  public Get get_get():
-    return get
-
-  def set_get(Get get):
-    self.get = get
-
-  public Put get_put():
-    return put
-
-  def set_put(Put put):
-    self.put = put
-
-  @Override
-  public String to_string():
-    return "Command [name=" + name + ", get=" + get + ", put=" + put + ", " + super.to_string()
-        + "]"
-
-  public Set<String> associated_value_descriptors():
-    Set<String> assoc_vD = new Hash_set<>()
-    if (self.get_get() != None)
-      assoc_vD.add_all(self.get_get().all_associated_value_descriptors())
-    if (self.get_put() != None)
-      assoc_vD.add_all(self.get_put().all_associated_value_descriptors())
-    return assoc_vD
-
-  @Override
-  public int hash_code():
-    return new Hash_code_builder().append_super(super.hash_code()).append(name).to_hash_code()
-
-  @Override
-  public boolean equals(Object obj):
-    if (!super.equals(obj))
-      return false
-    Command other = (Command) obj
-    return property_match(other)
-
-  private boolean property_match(Command other):
-    if (!string_property_match(self.name, other.name))
-      return false
-    if (!object_property_match(get, other.get))
-      return false
-    if (!object_property_match(put, other.put))
-      return false
-    return true
-
-}
+  def associated_value_descriptors(self):
+    associated_value_descriptor = []
+    if (self.get is not None):
+      associated_value_descriptor.extend(self.get.all_associated_value_descriptors())
+    if (self.put is not None):
+      associated_value_descriptor.extend(self.put.all_associated_value_descriptors())
+    return associated_value_descriptor

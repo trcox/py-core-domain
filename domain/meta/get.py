@@ -16,7 +16,7 @@
 # @version: 1.0.0
 #*******************************************************************************
 
-from domain.meta import Action
+from .action import Action
 
 class Get(Action):
   pass

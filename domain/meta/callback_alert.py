@@ -16,35 +16,31 @@
 # @version: 1.0.0
 #*******************************************************************************
 
+from .action_type import ActionType
 
-**
- * Class used to signal what device has been changed and what type of action was accomplished on it
- * in metadata.
- *
- *
-public class Callback_alert {
+ # Class used to signal what device has been changed and what type of action was accomplished on it
+ # in metadata.
+class CallbackAlert(object):
 
-  private Action_type type
+  def __init__(self, type, id):
+    self.type = type
+    self.id = id
 
+  @property
+  def type(self):
+    return self.__type
+
+  @type.setter
+  def type(self, type):
+    if not isinstance(type, ActionType):
+      raise TypeError("CallbackAlert type must be of type ActionType")
+    self.__type = type
+    
   # id of the device
-  private String id
+  @property
+  def id(self):
+    return self.__id
 
-  public Callback_alert():}
-
-  public Callback_alert(Action_type type, String id):
-    self.type = type
-    self.id = id
-
-  public Action_type get_type():
-    return type
-
-  def set_type(Action_type type):
-    self.type = type
-
-  public String get_id():
-    return id
-
-  def set_id(String id):
-    self.id = id
-
-}
+  @id.setter
+  def id(self, id):
+    self.__id = id

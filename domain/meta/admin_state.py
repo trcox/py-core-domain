@@ -16,8 +16,13 @@
 # @version: 1.0.0
 #*******************************************************************************
 
+from enum import Enum
 
 #TODO - remove locked and unlocked (lowercase) when all changes have been made
-public enum Admin_state {
-  @Deprecated locked, @Deprecated unlocked, LOCKED, UNLOCKED
-}
+class AdminState(Enum):
+  LOCKED = 1
+  UNLOCKED = 2
+  # @Deprecated
+  locked = 3
+  # @Deprecated
+  unlocked = 4

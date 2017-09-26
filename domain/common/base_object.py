@@ -22,9 +22,9 @@ class BaseObject(object):
 
   def __init__(self, created=None, modified=None, origin=None):
     initialization_time = time.time()
-    self.created = created if created is not None else initialization_time
-    self.modified = modified if modified is not None else initialization_time
-    self.origin = origin if origin is not None else initialization_time
+    self.created = created
+    self.modified = modified
+    self.origin = origin
 
   @property
   def created(self):

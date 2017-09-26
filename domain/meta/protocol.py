@@ -16,6 +16,7 @@
 # @version: 1.0.0
 #*******************************************************************************
 
+from enum import Enum
 
 # TODO - someday, we may need to refactor addressable based on needs of protocol. Other is a
 # placeholder today.
@@ -23,6 +24,9 @@
 # TCP - for MQTT and other general TCP based communications
 # MAC - MAC address - low level (example serial) communications
 # ZMQ - Zero MQ communications
-public enum Protocol {
-  HTTP, TCP, MAC, ZMQ, OTHER
-}
+class Protocol(Enum):
+  HTTP = 1
+  TCP = 2
+  MAC = 3
+  ZMQ = 4
+  OTHER = 5

@@ -41,12 +41,12 @@ class ActionTest(unittest.TestCase):
     self.a1.responses = self.responses
 
   def test_add_response(self):
-    self.a1.add_response(Response("bar", "foo"))
+    self.a1.add_response(Response("foo", "bar"))
     self.assertEqual(3, len(self.a1.responses), "Response not added to action correctly")
 
   def test_add_response_with_None_responses(self):
     self.a1.responses = None
-    self.a1.add_response(Response("bar", "foo"))
+    self.a1.add_response(Response("foo", "bar"))
     self.assertEqual(1, len(self.a1.responses), "Response not added to action correctly")
 
   def test_all_expected_values(self):

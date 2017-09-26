@@ -16,41 +16,39 @@
 # @version: 1.0.0
 #*******************************************************************************
 
+from .action import Action
 
-import java.util.Array_list
-import java.util.List
+class Put(Action):
 
-@Suppress_warnings("serial")
-public class Put extends Action {
+  def __init__(self, parameterNames=None, path=None, responses=None):
+    super(Put, self).__init__(path, responses)
+    self.parameterNames = parameterNames
 
   # ValueDescriptor names indicating the type and shape of the parameter
   # value
-  private List<String> parameter_names
+  @property
+  def parameterNames(self):
+    if (self.__parameterNames is None):
+      self.__parameterNames = []
+    return self.__parameterNames
 
-  def add_parameter_name(String param):
-    if (parameter_names is None)
-      parameter_names = new Array_list<>()
-    parameter_names.add(param)
+  @parameterNames.setter
+  def parameterNames(self, parameterNames):
+    self.__parameterNames = parameterNames
 
-  def remove_paremeter_name(String param):
-    if (parameter_names != None)
-      parameter_names.remove(param)
+  def add_parameterName(self, param):
+    if (self.parameterNames is None):
+      self.parameterNames = []
+    self.parameterNames.append(param)
 
-  public List<String> get_parameter_names():
-    if (parameter_names is None)
-      return new Array_list<>()
-    return parameter_names
+  def remove_parameter_name(self, param):
+    if (self.parameterNames is not None and param in self.parameterNames):
+      self.parameterNames.remove(param)
 
-  def set_parameter_names(List<String> parameter_names):
-    self.parameter_names = parameter_names
+  def __str__(self):
+    return "Put [parameterNames=%s]" % (self.parameterNames)
 
-  @Override
-  public String to_string():
-    return "Put [parameter_names=" + parameter_names + "]"
-
-  @Override
-  public List<String> all_associated_value_descriptors():
-    List<String> assoc_value_descriptors = super.all_associated_value_descriptors()
-    assoc_value_descriptors.add_all(get_parameter_names())
+  def all_associated_value_descriptors(self):
+    assoc_value_descriptors = super(Put, self).all_associated_value_descriptors()
+    assoc_value_descriptors.extend(self.parameterNames)
     return assoc_value_descriptors
-}
