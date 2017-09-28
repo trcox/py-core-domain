@@ -20,9 +20,9 @@
 import static org.junit.Assert.self.assertFalse
 import static org.junit.Assert.self.assertTrue
 
-import org.edgexfoundry.domain.meta.Admin_state
-import org.edgexfoundry.domain.meta.Device
-import org.edgexfoundry.domain.meta.Operating_state
+from domain.meta import Admin_state
+from domain.meta import Device
+from domain.meta import Operating_state
 import org.junit.Before
 import org.junit.Test
 

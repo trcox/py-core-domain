@@ -16,178 +16,134 @@
 # @version: 1.0.0
 #*******************************************************************************
 
+from domain.common import DescribedObject
+from .asset import Asset
 
-import java.util.Arrays
-
-import org.apache.commons.lang3.builder.Hash_code_builder
-import org.edgexfoundry.domain.common.DescribedObject
-import org.springframework.data.mongodb.core.index.Indexed
-import org.springframework.data.mongodb.core.mapping.DBRef
-import org.springframework.data.mongodb.core.mapping.Document
-
-@Document
-@Suppress_warnings("serial")
-public class Device extends DescribedObject implements Asset {
+class Device(DescribedObject, Asset):
 
   # TODO - someday have a naming service for all types (Device, Service,
   # Profile, Addressable, ValueDescriptor, etc.). This naming service makes
-  # sure the name is unique - potentially even across Edge_x instances in a
+  # sure the name is unique - potentially even across EdgeX instances in a
   # cluster - and can even generate a name with some help from the
   # originating service. Need to look into how Docker provides names to
   # containers and use a similar approach.
-
-  # non-database identifier for a device - must be unique
-  @Indexed(unique = true)
-  private String name
-
+  
+  def __init__(self, adminState=None, operatingState=None, description=None, name=None, lastConnected=None, lastReported=None, Addressable=None, 
+      labels=None, location=None, service=None, profile=None, created=None, modified=None, origin=None):
+    super(Device, self).__init__(created=created, modified=modified, origin=origin)
+    self.adminState = adminState
+    self.operatingState = operatingState
+    self.description = description
+    self.name = name
+    self.lastConnected = lastConnected
+    self.lastReported = lastReported
+    self.Addressable = Addressable
+    self.labels = labels
+    self.location = location
+    self.service = service
+    self.profile = profile
+    
   # administrative state - either locked or unlocked (as reported by devices
   # or device services)
-  private Admin_state admin_state
-
+  @property
+  def adminState(self):
+    return self.__adminState
+    
+  @adminState.setter
+  def adminState(self):
+   self.__adminState = adminState
+  
   # operational state - either enabled or disabled (set by humans or systems)
-  private Operating_state operating_state
-
-  # address (MQTT topic, HTTP address, serial bus, etc.) for the device
-  @DBRef
-  private Addressable addressable
-
+  @property
+  def operatingState(self):
+    return self.__operatingState
+    
+  @operatingState.setter
+  def operatingState(self):
+   self.__operatingState = operatingState
+    
+  @property
+  def description(self):
+    return self.__description
+    
+  @description.setter
+  def description(self):
+   self.__description = description
+  
+  # non-database identifier for a device - must be unique
+  @property
+  def name(self):
+    return self.__name
+    
+  @name.setter
+  def name(self):
+   self.__name = name
+    
   # time in milliseconds that the device last provided any feedback or
   # responded to any request
-  private long last_connected
+  @property
+  def lastConnected(self):
+    return self.__lastConnected
+    
+  @lastConnected.setter
+  def lastConnected(self):
+   self.__lastConnected = lastConnected
 
   # time in milliseconds that the device last reported data to the core
-  private long last_reported
+  @property
+  def lastReported(self):
+    return self.__lastReported
+    
+  @lastReported.setter
+  def lastReported(self):
+   self.__lastReported = lastReported
 
+  # address (MQTT topic, HTTP address, serial bus, etc.) for the device
+  @property
+  def addressable(self):
+    return self.__addressable
+    
+  @addressable.setter
+  def addressable(self):
+   self.__addressable = addressable
+    
   # tags or other labels applied to the device for search or other
   # identification needs
-  private String[] labels
+  @property
+  def labels(self):
+    return self.__labels
 
+  @labels.setter
+  def labels(self, labels):
+    self.__labels = labels
+    
   # device service specific location information (such as a lat-long)
-  private Object location
+  @property
+  def location(self):
+    return self.__location
 
+  @location.setter
+  def location(self, location):
+    self.__location = location
+    
   # owning device service (each device can have only one owning service)
-  @DBRef
-  private Device_service service
+  @property
+  def service(self):
+    return self.__service
 
+  @service.setter
+  def service(self, service):
+    self.__service = service
+    
   # associated device profile that describes the device
-  @DBRef
-  private Device_profile profile
+  @property
+  def profile(self):
+    return self.__profile
 
-  @Override
-  public Admin_state get_admin_state():
-    return self.admin_state
-
-  @Override
-  def set_admin_state(Admin_state admin_state):
-    self.admin_state = admin_state
-
-
-  @Override
-  public Operating_state get_operating_state():
-    return self.operating_state
-
-  @Override
-  def set_operating_state(Operating_state op_state):
-    self.operating_state = op_state
-
-
-  @Override
-  public String get_name():
-    return self.name
-
-  @Override
-  def set_name(String name):
-    self.name = name
-
-
-  @Override
-  public long get_last_connected():
-    return self.last_connected
-
-  @Override
-  def set_last_connected(long last_connected):
-    self.last_connected = last_connected
-
-  @Override
-  public long get_last_reported():
-    return self.last_reported
-
-  @Override
-  def set_last_reported(long last_reported):
-    self.last_reported = last_reported
-
-
-  @Override
-  public Addressable get_addressable():
-    return self.addressable
-
-  @Override
-  def set_addressable(Addressable addressable):
-    self.addressable = addressable
-
-  public String[] get_labels():
-    return labels
-
-  def set_labels(String[] labels):
-    self.labels = labels
-
-  public Object get_location():
-    return location
-
-  def set_location(Object location):
-    self.location = location
-
-  public Device_service get_service():
-    return service
-
-  def set_service(Device_service service):
-    self.service = service
-
-  public Device_profile get_profile():
-    return profile
-
-  def set_profile(Device_profile profile):
-    self.profile = profile
-
-  @Override
-  public String to_string():
-    return "Device [name=" + name + ", admin_state=" + admin_state + ", operating_state="
-        + operating_state + ", addressable=" + addressable + ", last_connected=" + last_connected
-        + ", last_reported=" + last_reported + ", labels=" + Arrays.to_string(labels) + ", location="
-        + location + ", service=" + service + ", profile=" + profile + "]"
-
-  @Override
-  public int hash_code():
-    return new Hash_code_builder().append_super(super.hash_code()).append(name).append(admin_state)
-        .append(operating_state).append(addressable).append(last_connected).append(last_reported)
-        .append(labels).append(location).append(service).append(profile).to_hash_code()
-
-  @Override
-  public boolean equals(Object obj):
-    if (!super.equals(obj))
-      return false
-    Device other = (Device) obj
-    return property_match(other)
-
-  private boolean property_match(Device other):
-    if (!string_property_match(self.name, other.name))
-      return false
-    if (admin_state != other.admin_state)
-      return false
-    if (operating_state != other.operating_state)
-      return false
-    if (!object_property_match(self.addressable, other.addressable))
-      return false
-    if (last_connected != other.last_connected)
-      return false
-    if (last_reported != other.last_reported)
-      return false
-    if (!string_array_property_match(labels, other.labels))
-      return false
-    if (!location.equals(other.location))
-      return false
-    if (!object_property_match(self.service, other.service))
-      return false
-    return object_property_match(self.profile, other.profile)
-
-}
+  @profile.setter
+  def profile(self, profile):
+    self.__profile = profile
+  
+  def __str__(self):
+    return "Device [name=%s, adminState=%s, operatingState=%s, addressable=%s, lastConnected=%s, lastReported=%s, labels=%s, location=%s, service=%s, profile=%s]" \
+        % (self.name, self.adminState, self.operatingState, self.Addressable, self.lastConnected, self.lastReported, self.labels, self.location, self.service, self.profile)

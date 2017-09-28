@@ -20,7 +20,7 @@
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.DBRef
 import org.apache.commons.lang3.builder.Hash_code_builder
-import org.edgexfoundry.domain.common.DescribedObject
+from domain.common import DescribedObject
 
 @Suppress_warnings("serial")
 public abstract class Service extends DescribedObject implements Asset {

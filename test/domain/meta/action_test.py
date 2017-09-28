@@ -17,7 +17,6 @@
 #******************************************************************************/
 
 import unittest
-
 from domain.meta import Action, Response
 
 class ActionTest(unittest.TestCase):

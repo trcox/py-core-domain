@@ -20,7 +20,7 @@
 import java.util.Arrays
 
 import org.apache.commons.lang3.builder.Hash_code_builder
-import org.edgexfoundry.domain.common.BaseObject
+from domain.common import BaseObject
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
 

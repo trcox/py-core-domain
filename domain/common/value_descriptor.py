@@ -108,7 +108,8 @@ class ValueDescriptor(DescribedObject):
 
   def __hash__(self):
     temp = self
-    for i, label in enumerate(self.labels):
-      setattr(temp, "label%s" % i, label)
-    temp.labels = None
+    if temp.labels is not None:
+      for i, label in enumerate(self.labels):
+        setattr(temp, "label%s" % i, label)
+      temp.labels = None
     return super(ValueDescriptor, temp).__hash__()

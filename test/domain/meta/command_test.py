@@ -17,7 +17,6 @@
 #******************************************************************************/
 
 import unittest
-
 from domain.meta import Command, Get, Put, Response
 
 class CommandTest(unittest.TestCase):

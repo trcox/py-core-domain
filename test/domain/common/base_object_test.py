@@ -17,9 +17,7 @@
 #*******************************************************************************
 
 import unittest
-
 import time
-
 from domain.common import BaseObject
 from domain.core import Event
 

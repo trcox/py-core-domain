@@ -16,51 +16,55 @@
 # @version: 1.0.0
 #*******************************************************************************
 
+class DeviceObject(object):
 
-import java.io.Serializable
-
-@Suppress_warnings("serial")
-public class Device_object implements Serializable{
-
-  private String name
-  private String tag
-  private String description
-  private Profile_property properties
-
-  private Object attributes
-
-  public String get_name():
-    return name
-
-  def set_name(String name):
+  def __init__(self, name=None, tag=None, description=None, properties=None, attributes=None):
     self.name = name
-
-  public String get_tag():
-    return tag
-
-  def set_tag(String tag):
     self.tag = tag
-
-  public String get_description():
-    return description
-
-  def set_description(String description):
     self.description = description
-
-  public Profile_property get_properties():
-    return properties
-
-  def set_properties(Profile_property properties):
     self.properties = properties
-
-  public Object get_attributes():
-    return attributes
-
-  def set_attributes(Object attributes):
     self.attributes = attributes
+  
+  @property
+  def name(self):
+    return self.__name
 
-  @Override
-  public String to_string():
-    return "Device_object [name=" + name + ", tag=" + tag + ", description=" + description
-        + ", properties=" + properties + ", attributes=" + attributes + "]"
-}
+  @name.setter
+  def name(self, name):
+    self.__name = name
+    
+  @property
+  def tag(self):
+    return self.__tag
+
+  @tag.setter
+  def tag(self, tag):
+    self.__tag = tag
+    
+  @property
+  def description(self):
+    return self.__description
+
+  @description.setter
+  def description(self, description):
+    self.__description = description
+    
+  @property
+  def properties(self):
+    return self.__properties
+
+  @properties.setter
+  def properties(self, properties):
+    self.__properties = properties
+    
+  @property
+  def attributes(self):
+    return self.__attributes
+
+  @attributes.setter
+  def attributes(self, attributes):
+    self.__attributes = attributes
+
+  def __str__(self):
+    return "DeviceObject [name=%s, tag=%s, description=%s, properties=%s, attributes=%s]" \
+        % (self.name, self.tag, self.description, self.properties, self.attributes)

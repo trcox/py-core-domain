@@ -16,156 +16,131 @@
 # @version: 1.0.0
 #*******************************************************************************
 
+from domain.common import DescribedObject
+from .command import Command
 
-import java.io.Serializable
-import java.util.Array_list
-import java.util.Arrays
-import java.util.List
+class DeviceProfile(DescribedObject):
 
-import org.apache.commons.lang3.builder.Hash_code_builder
-import org.edgexfoundry.domain.common.DescribedObject
-import org.springframework.data.mongodb.core.index.Indexed
-import org.springframework.data.mongodb.core.mapping.DBRef
-import org.springframework.data.mongodb.core.mapping.Document
+  def __init__(self, name=None, manufacturer=None, model=None, labels=None, deviceResources=None, resources=None,
+      commands=None, description=None, created=None, modified=None, origin=None):
+    super(DeviceProfile, self).__init__(description, created, modified, origin)
+    self.name = name
+    self.manufacturer = manufacturer
+    self.model = model
+    self.labels = labels
+    self.deviceResources = deviceResources
+    self.resources = resources
+    self.commands = commands
+    
+  # non-database identifier for a device profile must be unique  
+  @property
+  def name(self):
+    return self.__name
 
-@Document
-@Suppress_warnings("serial")
-public class Device_profile extends DescribedObject implements Serializable {
-
-  # non-database identifier for a device profile must be unique
-  @Indexed(unique = true)
-  private String name
-
+  @name.setter
+  def name(self, name):
+    self.__name = name
+    
   # manufacture of the device
-  private String manufacturer
+  @property
+  def manufacturer(self):
+    return self.__manufacturer
 
-  # model of the device
-  private String model
+  @manufacturer.setter
+  def manufacturer(self, manufacturer):
+    self.__manufacturer = manufacturer
+  
+  # model of the device  
+  @property
+  def model(self):
+    return self.__model
 
+  @model.setter
+  def model(self, model):
+    self.__model = model
+  
   # tag or label used by services to identify or search for groups of
   # profiles
-  private String[] labels
+  @property
+  def labels(self):
+    return self.__labels
+
+  @labels.setter
+  def labels(self, labels):
+    self.__labels = labels
 
   # device service used JSON data that is required to communicate with
   # devices of this profile type
-  private Object objects
+  @property
+  def deviceResources(self):
+    return self.__deviceResources
 
-  private List<Device_object> device_resources
+  @deviceResources.setter
+  def deviceResources(self, deviceResources):
+    self.__deviceResources = deviceResources
 
   # device service used object actions that are optionally used to map
   # commands to objects of devices of this profile type
-  private List<Profile_resource> resources
+  @property
+  def resources(self):
+    return self.__resources
 
-  # list of commands to getput information from the associated devices of
+  @resources.setter
+  def resources(self, resources):
+    self.__resources = resources
+
+  # list of commands to get/put information from the associated devices of
   # this profile type
-  @DBRef
-  private List<Command> commands
+  @property
+  def commands(self):
+    return self.__commands
 
-  public String get_name():
-    return name
+  @commands.setter
+  def commands(self, commands):
+    self.__commands = commands
 
-  def set_name(String name):
-    self.name = name
+  def add_command(self, command):
+    if (self.commands is None):
+      self.commands = []
+    if not isinstance(command, Command):
+      raise TypeError("DeviceProfile command must be of type Command")
+    self.commands.append(command)
 
-  public String get_manufacturer():
-    return manufacturer
-
-  def set_manufacturer(String manufacturer):
-    self.manufacturer = manufacturer
-
-  public String get_model():
-    return model
-
-  def set_model(String model):
-    self.model = model
-
-  public String[] get_labels():
-    return labels
-
-  def set_labels(String[] labels):
-    self.labels = labels
-
-  public Object get_objects():
-    return objects
-
-  def set_objects(Object objects):
-    self.objects = objects
-
-  public List<Device_object> get_device_resources():
-    return device_resources
-
-  def set_device_resources(List<Device_object> device_resources):
-    self.device_resources = device_resources
-
-  public List<Command> get_commands():
-    return commands
-
-  def set_commands(List<Command> commands):
-    self.commands = commands
-
-  def add_command(Command command):
-    if (self.commands is None)
-      self.commands = new Array_list<>()
-    self.commands.add(command)
-
-  public boolean remove_command(Command command):
-    if (self.commands is None)
-      self.commands = new Array_list<>()
+  def remove_command(self, command):
+    if (self.commands is None):
+      self.commands = []
+    if command not in self.commands:
+      return False
     return self.commands.remove(command)
 
-  @Override
-  public int hash_code():
-    return new Hash_code_builder().append_super(super.hash_code()).append(commands)
-        .append(Arrays.hash_code(labels)).append(manufacturer).append(model).append(name)
-        .append(objects).append(resources).to_hash_code()
-
-  @Override
-  public boolean equals(Object obj):
-    if (!super.equals(obj))
-      return false
-    Device_profile other = (Device_profile) obj
-    return property_match(other)
-
-  private boolean property_match(Device_profile other):
-    if (!compare_property_lists(commands, other.commands))
-      return false
-    if (!string_array_property_match(labels, other.labels))
-      return false
-    if (!string_property_match(manufacturer, other.manufacturer))
-      return false
-    if (!string_property_match(model, other.model))
-      return false
-    if (!string_property_match(name, other.name))
-      return false
-    if (!object_property_match(objects, other.objects))
-      return false
-    return true
-
-  private boolean compare_property_lists(List<?> this_list, List<?> other_list):
+  def compare_property_lists(this_list, other_list):
     if (this_list is None):
-      if (other_list != None)
-        return false
-      if (other_list is None)
-        return false
-      if (this_list.size() != other_list.size())
-        return false
-      int i = 0
-      for (Object object : this_list):
-        if (!object.equals(other_list.get(i)))
-          return false
-        i++
-    return true
+      if (other_list is not None):
+        return False
+    else:
+      if (other_list is None):
+        return False
+      if (len(this_list) != len(other_list)):
+        return False
+      i = 0
+      for object in this_list:
+        if (not object == other_list.get(i)):
+          return False
+        i += 1
+    return True
 
-  @Override
-  public String to_string():
-    return "Device_profile [name=" + name + ", manufacturer=" + manufacturer + ", model=" + model
-        + ", labels=" + Arrays.to_string(labels) + ", objects=" + device_resources + ", commands="
-        + commands + ", resources=" + resources + "]"
+  def __str__(self):
+    return "DeviceProfile [name=%s, manufacturer=%s, model=%s, labels=%s, deviceResources=%s, commands=%s, resources=%s]" \
+        % (self.name, self.manufacturer, self.model, self.labels, self.deviceResources, self.commands, self.resources)
 
-  public List<Profile_resource> get_resources():
-    return resources
-
-  def set_resources(List<Profile_resource> resources):
-    self.resources = resources
-
-}
+  def __hash__(self):
+    temp = self
+    if temp.labels is not None:
+      for i, label in enumerate(self.labels):
+        setattr(temp, "label%s" % i, label)
+      temp.labels = None
+    if temp.commands is not None:
+      for i, command in enumerate(self.commands):
+        setattr(temp, "command%s" % i, command)
+      temp.commands = None
+    return super(DeviceProfile, temp).__hash__()

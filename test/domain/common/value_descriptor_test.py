@@ -17,7 +17,6 @@
 #*******************************************************************************
 
 import unittest
-
 from domain.common import IoTType, ValueDescriptor
 
 class ValueDescriptorTest(unittest.TestCase):

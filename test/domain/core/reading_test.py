@@ -17,7 +17,6 @@
 #*******************************************************************************
 
 import unittest
-
 from domain.core import Reading
 
 class ReadingTest(unittest.TestCase):

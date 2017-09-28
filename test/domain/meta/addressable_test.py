@@ -17,7 +17,6 @@
 #******************************************************************************/
 
 import unittest
-
 from domain.common import HTTPMethod
 from domain.meta import Addressable, Protocol
 

@@ -17,7 +17,6 @@
 #*******************************************************************************
 
 import unittest
-
 from domain.core import Event, Reading
 
 class EventTest(unittest.TestCase):
