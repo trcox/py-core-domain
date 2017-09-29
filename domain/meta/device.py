@@ -1,4 +1,4 @@
-#*******************************************************************************
+# *******************************************************************************
 # Copyright 2017 Dell Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -14,12 +14,13 @@
 # @microservice: py-core-domain library
 # @author: Tyler Cox, Dell
 # @version: 1.0.0
-#*******************************************************************************
+# *******************************************************************************
 
-from domain.common import DescribedObject
-from .asset import Asset
+from domain.common import described_object
+from domain.meta import asset
 
-class Device(DescribedObject, Asset):
+
+class Device(described_object.DescribedObject, asset.Asset):
 
   # TODO - someday have a naming service for all types (Device, Service,
   # Profile, Addressable, ValueDescriptor, etc.). This naming service makes

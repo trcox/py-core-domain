@@ -1,4 +1,4 @@
-#*******************************************************************************
+# *******************************************************************************
 # Copyright 2016-2017 Dell Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -14,10 +14,12 @@
 # @microservice: core-domain library
 # @author: Jim White, Dell
 # @version: 1.0.0
-#******************************************************************************/
+# ******************************************************************************/
 
 import unittest
-from domain.meta import Action, Response
+from domain.meta import action
+from domain.meta import response
+
 
 class ActionTest(unittest.TestCase):
 
@@ -29,23 +31,23 @@ class ActionTest(unittest.TestCase):
   TEST_DECRIPTION2 = "not found"
 
   def setUp(self):
-    self.r1 = Response(self.TEST_CODE, self.TEST_DECRIPTION)
+    self.r1 = response.Response(self.TEST_CODE, self.TEST_DECRIPTION)
     self.r1.add_expected_value(self.TEST_VALUE1)
     self.r1.add_expected_value(self.TEST_VALUE2)
-    self.r2 = Response(self.TEST_CODE2, self.TEST_DECRIPTION2)
-    self.a1 = Action()
+    self.r2 = response.Response(self.TEST_CODE2, self.TEST_DECRIPTION2)
+    self.a1 = action.Action()
     self.responses = []
     self.responses.append(self.r1)
     self.responses.append(self.r2)
     self.a1.responses = self.responses
 
   def test_add_response(self):
-    self.a1.add_response(Response("foo", "bar"))
+    self.a1.add_response(response.Response("foo", "bar"))
     self.assertEqual(3, len(self.a1.responses), "Response not added to action correctly")
 
   def test_add_response_with_None_responses(self):
     self.a1.responses = None
-    self.a1.add_response(Response("foo", "bar"))
+    self.a1.add_response(response.Response("foo", "bar"))
     self.assertEqual(1, len(self.a1.responses), "Response not added to action correctly")
 
   def test_all_expected_values(self):

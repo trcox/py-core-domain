@@ -1,4 +1,4 @@
-#*******************************************************************************
+# *******************************************************************************
 # Copyright 2017 Dell Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -14,9 +14,10 @@
 # @microservice: py-core-domain library
 # @author: Tyler Cox, Dell
 # @version: 1.0.0
-#*******************************************************************************
+# *******************************************************************************
 
-from .response import Response
+from domain.meta import response as response_module
+
 
 class Action(object):
 
@@ -52,7 +53,7 @@ class Action(object):
   def add_response(self, response):
     if (self.responses is None):
       self.responses = []
-    if not isinstance(response, Response):
+    if not isinstance(response, response_module.Response):
       raise TypeError("Action response must be of type Response")
     self.responses.append(response)
 

@@ -1,4 +1,4 @@
-#*******************************************************************************
+# *******************************************************************************
 # Copyright 2017 Dell Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -14,13 +14,14 @@
 # @microservice: py-core-domain library
 # @author: Tyler Cox, Dell
 # @version: 1.0.0
-#*******************************************************************************
+# *******************************************************************************
 
-from domain.common import BaseObject
-from .get import Get
-from .put import Put
+from domain.common import base_object
+from domain.meta import get as get_module
+from domain.meta import put as put_module
 
-class Command(BaseObject):
+
+class Command(base_object.BaseObject):
 
   def __init__(self, name=None, get=None, put=None, created=None, modified=None, origin=None):
     super(Command, self).__init__(created, modified, origin)
@@ -45,7 +46,7 @@ class Command(BaseObject):
 
   @get.setter
   def get(self, get):
-    if (get is not None and not isinstance(get, Get)):
+    if (get is not None and not isinstance(get, get_module.Get)):
       raise TypeError("Command get must be of type Get")
     self.__get = get
 
@@ -56,7 +57,7 @@ class Command(BaseObject):
 
   @put.setter
   def put(self, put):
-    if (put is not None and not isinstance(put, Put)):
+    if (put is not None and not isinstance(put, put_module.Put)):
       raise TypeError("Command put must be of type Put")
     self.__put = put
 

@@ -1,4 +1,4 @@
-#*******************************************************************************
+# *******************************************************************************
 # Copyright 2016-2017 Dell Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -14,17 +14,19 @@
 # @microservice: core-domain library
 # @author: Jim White, Dell
 # @version: 1.0.0
-#******************************************************************************/
+# ******************************************************************************/
 
 import unittest
-from domain.common import HTTPMethod
-from domain.meta import Addressable, Protocol
+from domain.common import http_method
+from domain.meta import addressable
+from domain.meta import protocol
+
 
 class AddressableTest(unittest.TestCase):
 
   TEST_NAME = "test_addressable"
-  TEST_HTTP_PROTOCOL = Protocol.HTTP
-  TEST_MQTT_PROTOCOL = Protocol.TCP
+  TEST_HTTP_PROTOCOL = protocol.Protocol.HTTP
+  TEST_MQTT_PROTOCOL = protocol.Protocol.TCP
   TEST_ADDR = "localhost"
   TEST_PATH = "/pathtosomething"
   TEST_PORT = 49888
@@ -32,12 +34,12 @@ class AddressableTest(unittest.TestCase):
   TEST_TOPIC = "test_topic"
   TEST_USER = "fred"
   TEST_PASS = "password"
-  TEST_METHOD = HTTPMethod.POST
+  TEST_METHOD = http_method.HTTPMethod.POST
 
   def setUp(self):
-    self.a1 = Addressable(self.TEST_NAME, self.TEST_HTTP_PROTOCOL, self.TEST_ADDR, self.TEST_PORT, path=self.TEST_PATH, method=self.TEST_METHOD)
-    self.a2 = Addressable(self.TEST_NAME, self.TEST_HTTP_PROTOCOL, self.TEST_ADDR, self.TEST_PORT, path=self.TEST_PATH, method=self.TEST_METHOD)
-    self.a_for_mqtt = Addressable(self.TEST_NAME, self.TEST_MQTT_PROTOCOL, self.TEST_ADDR, self.TEST_PORT, self.TEST_PUBLISHER,
+    self.a1 = addressable.Addressable(self.TEST_NAME, self.TEST_HTTP_PROTOCOL, self.TEST_ADDR, self.TEST_PORT, path=self.TEST_PATH, method=self.TEST_METHOD)
+    self.a2 = addressable.Addressable(self.TEST_NAME, self.TEST_HTTP_PROTOCOL, self.TEST_ADDR, self.TEST_PORT, path=self.TEST_PATH, method=self.TEST_METHOD)
+    self.a_for_mqtt = addressable.Addressable(self.TEST_NAME, self.TEST_MQTT_PROTOCOL, self.TEST_ADDR, self.TEST_PORT, self.TEST_PUBLISHER,
         self.TEST_USER, self.TEST_PASS, self.TEST_TOPIC, path=self.TEST_PATH)
 
   def test_get_base_url(self):
@@ -78,7 +80,7 @@ class AddressableTest(unittest.TestCase):
     self.assertFalse(self.a1 == self.a2, "Addressable with different names values are equal")
 
   def test_equal_with_different_protocol(self):
-    self.a2.protocol = Protocol.MAC
+    self.a2.protocol = protocol.Protocol.MAC
     self.assertFalse(self.a1 == self.a2, "Addressable with different protocol values are equal")
 
   def test_equal_with_different_address(self):

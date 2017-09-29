@@ -1,4 +1,4 @@
-#*******************************************************************************
+# *******************************************************************************
 # Copyright 2017 Dell Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -14,11 +14,13 @@
 # @microservice: py-core-domain library
 # @author: Tyler Cox, Dell
 # @version: 1.0.0
-#*******************************************************************************
+# *******************************************************************************
 
 from enum import Enum
 
 #TODO - remove locked and unlocked (lowercase) when all changes have been made
+
+
 class AdminState(Enum):
   LOCKED = 1
   UNLOCKED = 2

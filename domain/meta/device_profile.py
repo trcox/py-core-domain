@@ -1,4 +1,4 @@
-#*******************************************************************************
+# *******************************************************************************
 # Copyright 2017 Dell Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -14,12 +14,13 @@
 # @microservice: py-core-domain library
 # @author: Tyler Cox, Dell
 # @version: 1.0.0
-#*******************************************************************************
+# *******************************************************************************
 
-from domain.common import DescribedObject
-from .command import Command
+from domain.common import described_object
+from domain.meta import command as comm
 
-class DeviceProfile(DescribedObject):
+
+class DeviceProfile(described_object.DescribedObject):
 
   def __init__(self, name=None, manufacturer=None, model=None, labels=None, deviceResources=None, resources=None,
       commands=None, description=None, created=None, modified=None, origin=None):
@@ -102,7 +103,7 @@ class DeviceProfile(DescribedObject):
   def add_command(self, command):
     if (self.commands is None):
       self.commands = []
-    if not isinstance(command, Command):
+    if not isinstance(command, comm.Command):
       raise TypeError("DeviceProfile command must be of type Command")
     self.commands.append(command)
 

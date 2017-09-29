@@ -1,4 +1,4 @@
-#*******************************************************************************
+# *******************************************************************************
 # Copyright 2017 Dell Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -14,76 +14,71 @@
 # @microservice: py-core-domain library
 # @author: Tyler Cox, Dell
 # @version: 1.0.0
-#*******************************************************************************
+# *******************************************************************************
 
-from domain.common import BaseObject
+from domain.common import base_object
 
-class Event(BaseObject):
 
-  def __init__(self, device=None, readings=None, pushed=None, created=None, modified=None, origin=None):
-    super(Event, self).__init__(created, modified, origin)
-    self.pushed = pushed
-    self.readings = readings
-    self.device = device
+class Event(base_object.BaseObject):
 
-  @property
-  def device(self):
-    return self.__device
+    def __init__(self, device=None, readings=None, pushed=None, created=None,
+                 modified=None, origin=None):
+        super(Event, self).__init__(created, modified, origin)
+        self.pushed = pushed
+        self.readings = readings
+        self.device = device
 
-  @device.setter
-  def device(self, device):
-    self.__device = device
-    self.update_readings_device()
+    @property
+    def device(self):
+        return self.__device
 
-  @property
-  def pushed(self):
-    return self.__pushed
+    @device.setter
+    def device(self, device):
+        self.__device = device
+        self.update_readings_device()
 
-  @pushed.setter
-  def pushed(self, pushed):
-    self.__pushed = pushed
+    @property
+    def readings(self):
+        return self.__readings
 
-  @property
-  def readings(self):
-    return self.__readings
+    @readings.setter
+    def readings(self, readings):
+        if readings:
+            for reading in readings:
+                if hasattr(self, '__device'):
+                    reading.device = self.device
+        self.__readings = readings
 
-  @readings.setter
-  def readings(self, readings):
-    self.__readings = readings
-    if (self.__readings is not None):
-      for r in self.__readings:
-        if hasattr(self, '__device'):
-          r.device = self.device
-
-  def add_reading(self, reading):
-    if self.readings is None:
-      self.readings = []
-    reading.device = self.device
-    self.readings.append(reading)
-
-  def add_readings(self, readings):
-    if self.readings is None:
-      self.readings = []
-    for r in readings:
-      r.device = self.device
-    self.readings.extend(readings)
-
-  def remove_reading(self, reading):
-    if self.readings is None:
-      self.readings = []
-    if reading not in self.readings:
-      return False
-    return self.readings.remove(reading)
-
-  def mark_pushed(self, pushed):
-    self.pushed = pushed
-    for reading in self.readings:
-      reading.pushed = pushed
-
-  def update_readings_device(self):
-    if (self.readings is not None) and (len(self.readings) > 0):
-      for reading in self.readings:
+    def add_reading(self, reading):
+        if self.readings is None:
+            self.readings = []
         reading.device = self.device
+        self.readings.append(reading)
 
-  def __str__(self):
-    return "Event [pushed=%s, device= %s, readings=%s, to_string()=%s]" % (self.pushed, self.device, self.readings, super(Event, self).__str__())
+    def add_readings(self, readings):
+        if self.readings is None:
+            self.readings = []
+        for reading in readings:
+            reading.device = self.device
+        self.readings.extend(readings)
+
+    def remove_reading(self, reading):
+        if self.readings is None:
+            self.readings = []
+        if reading not in self.readings:
+            return False
+        return self.readings.remove(reading)
+
+    def mark_pushed(self, pushed):
+        self.pushed = pushed
+        for reading in self.readings:
+            reading.pushed = pushed
+
+    def update_readings_device(self):
+        if self.readings:
+            for reading in self.readings:
+                reading.device = self.device
+
+    def __str__(self):
+        return "Event [pushed=%s, device= %s, readings=%s, to_string()=%s]" \
+            % (self.pushed, self.device, self.readings, super(Event, self).__str__())

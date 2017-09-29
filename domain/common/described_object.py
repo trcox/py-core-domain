@@ -1,4 +1,4 @@
-#*******************************************************************************
+# *******************************************************************************
 # Copyright 2017 Dell Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -14,23 +14,17 @@
 # @microservice: py-core-domain library
 # @author: Tyler Cox, Dell
 # @version: 1.0.0
-#*******************************************************************************
+# *******************************************************************************
 
-from domain.common import BaseObject
+from domain.common import base_object
 
-class DescribedObject(BaseObject):
 
-  def __init__(self, description=None, created=None, modified=None, origin=None):
-    super(DescribedObject, self).__init__(created, modified, origin)
-    self.description = description
+class DescribedObject(base_object.BaseObject):
 
-  @property
-  def description(self):
-    return self.__description
+    def __init__(self, description=None, created=None, modified=None, origin=None):
+        super(DescribedObject, self).__init__(created, modified, origin)
+        self.description = description
 
-  @description.setter
-  def description(self, description):
-    self.__description = description
-
-  def __str__(self):
-    return "DescribedObject [description=%s, to_string()=%s]" % (self.description, super(DescribedObject, self).__str__())
+    def __str__(self):
+        return "DescribedObject [description=%s, to_string()=%s]" \
+            % (self.description, super(DescribedObject, self).__str__())

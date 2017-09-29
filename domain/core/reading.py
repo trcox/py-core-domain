@@ -1,4 +1,4 @@
-#*******************************************************************************
+# *******************************************************************************
 # Copyright 2017 Dell Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -14,50 +14,21 @@
 # @microservice: py-core-domain library
 # @author: Tyler Cox, Dell
 # @version: 1.0.0
-#*******************************************************************************
+# *******************************************************************************
 
-from domain.common import BaseObject
+from domain.common import base_object
 
-class Reading(BaseObject):
 
-  def __init__(self, value=None, name=None, device=None, pushed=None, created=None, modified=None, origin=None):
-    super(Reading, self).__init__(created, modified, origin)
-    self.pushed = pushed
-    self.name = name
-    self.value = value
-    self.device = device
+class Reading(base_object.BaseObject):
 
-  @property
-  def name(self):
-    return self.__name
+    def __init__(self, value=None, name=None, device=None, pushed=None, created=None,
+                 modified=None, origin=None):
+        super(Reading, self).__init__(created, modified, origin)
+        self.pushed = pushed
+        self.name = name
+        self.value = value
+        self.device = device
 
-  @name.setter
-  def name(self, name):
-    self.__name = name
-
-  @property
-  def pushed(self):
-    return self.__pushed
-
-  @pushed.setter
-  def pushed(self, pushed):
-    self.__pushed = pushed
-
-  @property
-  def value(self):
-    return self.__value
-
-  @value.setter
-  def value(self, value):
-    self.__value = value
-
-  @property
-  def device(self):
-    return self.__device
-
-  @device.setter
-  def device(self, device):
-    self.__device = device
-
-  def __str__(self):
-    return "Reading [pushed=%s, name= %s, value=%s, device=%s]" % (self.pushed, self.name, self.value, self.device)
+    def __str__(self):
+        return "Reading [pushed=%s, name= %s, value=%s, device=%s]" \
+            % (self.pushed, self.name, self.value, self.device)

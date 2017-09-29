@@ -1,4 +1,4 @@
-#*******************************************************************************
+# *******************************************************************************
 # Copyright 2017 Dell Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -14,13 +14,15 @@
 # @microservice: py-core-domain library
 # @author: Tyler Cox, Dell
 # @version: 1.0.0
-#*******************************************************************************
+# *******************************************************************************
 
 from enum import Enum
 
+# pylint: disable=C0103
+
 class IoTType(Enum):
-  S = 1
-  I = 2
-  F = 3
-  B = 4
-  J = 5
+    S = 1
+    I = 2
+    F = 3
+    B = 4
+    J = 5

@@ -1,4 +1,4 @@
-#*******************************************************************************
+# *******************************************************************************
 # Copyright 2017 Dell Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -14,12 +14,14 @@
 # @microservice: py-core-domain library
 # @author: Tyler Cox, Dell
 # @version: 1.0.0
-#*******************************************************************************
+# *******************************************************************************
 
 from .action_type import ActionType
 
  # Class used to signal what device has been changed and what type of action was accomplished on it
  # in metadata.
+ 
+ 
 class CallbackAlert(object):
 
   def __init__(self, type, id):

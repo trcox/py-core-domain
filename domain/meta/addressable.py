@@ -1,4 +1,4 @@
-#*******************************************************************************
+# *******************************************************************************
 # Copyright 2017 Dell Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -14,16 +14,17 @@
 # @microservice: py-core-domain library
 # @author: Tyler Cox, Dell
 # @version: 1.0.0
-#*******************************************************************************
+# *******************************************************************************
 
-from domain.common import BaseObject, HTTPMethod
-from .protocol import Protocol
+from domain.common import base_object, http_method
+from domain.meta import protocol as protocol_module
 
-class Addressable (BaseObject):
+
+class Addressable (base_object.BaseObject):
 
   def __init__(self, name, protocol, address, port, publisher=None,
-      user=None, password=None, topic=None, path=None, method=HTTPMethod.POST, 
-      created=None, modified=None, origin=None):
+               user=None, password=None, topic=None, path=None, method=None, 
+               created=None, modified=None, origin=None):
     super(Addressable, self).__init__(created, modified, origin)
     self.name = name
     self.protocol = protocol
@@ -34,7 +35,7 @@ class Addressable (BaseObject):
     self.password = password
     self.topic = topic
     self.path = path
-    self.method = method
+    self.method = method if method is not None else http_method.HTTPMethod.POST
 
   # unique name and identifier of the addressable
   @property
@@ -52,7 +53,7 @@ class Addressable (BaseObject):
 
   @method.setter
   def method(self, method):
-    if not isinstance(method, HTTPMethod):
+    if not isinstance(method, http_method.HTTPMethod):
       raise TypeError("Addressable method must be of type HTTPMethod")
     self.__method = method
 
@@ -63,7 +64,7 @@ class Addressable (BaseObject):
 
   @protocol.setter
   def protocol(self, protocol):
-    if not isinstance(protocol, Protocol):
+    if not isinstance(protocol, protocol_module.Protocol):
       raise TypeError("Addressable protocol must be of type Protocol")
     self.__protocol = protocol
 

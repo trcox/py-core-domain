@@ -1,4 +1,4 @@
-#*******************************************************************************
+# *******************************************************************************
 # Copyright 2016-2017 Dell Inself.c1.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -14,10 +14,14 @@
 # @microservice: core-domain library
 # @author: Jim White, Dell
 # @version: 1.0.0
-#******************************************************************************/
+# ******************************************************************************/
 
 import unittest
-from domain.meta import Command, Get, Put, Response
+from domain.meta import command
+from domain.meta import get
+from domain.meta import put
+from domain.meta import response
+
 
 class CommandTest(unittest.TestCase):
 
@@ -34,21 +38,21 @@ class CommandTest(unittest.TestCase):
     expected = []
     expected.append(self.TEST_EXPECTED_VALUE1)
     expected.append(self.TEST_EXPECTED_VALUE2)
-    r = Response(self.TEST_CODE, self.TEST_DESCRIPTION, expected)
-    self.c1 = Command()
+    r = response.Response(self.TEST_CODE, self.TEST_DESCRIPTION, expected)
+    self.c1 = command.Command()
     self.c1.name = self.TEST_NAME
-    g = Get()
+    g = get.Get()
     g.path = self.TEST_PATH
     g.add_response(r)
     self.c1.get = g
-    p = Put()
+    p = put.Put()
     p.path = self.TEST_PATH
     params = []
     params.append(self.TEST_PARAM1)
     params.append(self.TEST_PARAM2)
     p.parameterNames = params
     self.c1.put = p
-    self.c2 = Command()
+    self.c2 = command.Command()
     self.c2.name = self.TEST_NAME
     self.c2.get = g
     self.c2.put = p

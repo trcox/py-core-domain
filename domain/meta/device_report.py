@@ -1,4 +1,4 @@
-#*******************************************************************************
+# *******************************************************************************
 # Copyright 2017 Dell Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -14,19 +14,11 @@
 # @microservice: py-core-domain library
 # @author: Tyler Cox, Dell
 # @version: 1.0.0
-#*******************************************************************************
+# *******************************************************************************
 
-
-import java.util.Arrays
-
-import org.apache.commons.lang3.builder.Hash_code_builder
 from domain.common import BaseObject
-import org.springframework.data.mongodb.core.index.Indexed
-import org.springframework.data.mongodb.core.mapping.Document
 
-@Document
-@Suppress_warnings("serial")
-public class Device_report extends BaseObject {
+class DeviceReport(BaseObject):
 
   # non-database identifier for a device report - must be unique
   @Indexed(unique = true)

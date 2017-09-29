@@ -1,4 +1,4 @@
-#*******************************************************************************
+# *******************************************************************************
 # Copyright 2016-2017 Dell Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -14,7 +14,7 @@
 # @microservice: core-domain library
 # @author: Jim White, Dell
 # @version: 1.0.0
-#******************************************************************************/
+# ******************************************************************************/
 
 
 import static org.junit.Assert.self.assertEqual
