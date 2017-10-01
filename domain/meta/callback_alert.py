@@ -16,33 +16,16 @@
 # @version: 1.0.0
 # *******************************************************************************
 
-from .action_type import ActionType
+# Class used to signal what device has been changed and what type of action was accomplished on it
+# in metadata.
 
- # Class used to signal what device has been changed and what type of action was accomplished on it
- # in metadata.
- 
- 
+# pylint: disable=W0622
+# pylint: disable=C0103
+# pylint: disable=R0903
+
+
 class CallbackAlert(object):
 
-  def __init__(self, type, id):
-    self.type = type
-    self.id = id
-
-  @property
-  def type(self):
-    return self.__type
-
-  @type.setter
-  def type(self, type):
-    if not isinstance(type, ActionType):
-      raise TypeError("CallbackAlert type must be of type ActionType")
-    self.__type = type
-    
-  # id of the device
-  @property
-  def id(self):
-    return self.__id
-
-  @id.setter
-  def id(self, id):
-    self.__id = id
+    def __init__(self, type, id):
+        self.type = type
+        self.id = id

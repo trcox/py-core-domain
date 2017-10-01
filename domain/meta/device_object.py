@@ -19,53 +19,13 @@
 
 class DeviceObject(object):
 
-  def __init__(self, name=None, tag=None, description=None, properties=None, attributes=None):
-    self.name = name
-    self.tag = tag
-    self.description = description
-    self.properties = properties
-    self.attributes = attributes
-  
-  @property
-  def name(self):
-    return self.__name
+    def __init__(self, name=None, tag=None, description=None, properties=None, attributes=None):
+        self.name = name
+        self.tag = tag
+        self.description = description
+        self.properties = properties
+        self.attributes = attributes
 
-  @name.setter
-  def name(self, name):
-    self.__name = name
-    
-  @property
-  def tag(self):
-    return self.__tag
-
-  @tag.setter
-  def tag(self, tag):
-    self.__tag = tag
-    
-  @property
-  def description(self):
-    return self.__description
-
-  @description.setter
-  def description(self, description):
-    self.__description = description
-    
-  @property
-  def properties(self):
-    return self.__properties
-
-  @properties.setter
-  def properties(self, properties):
-    self.__properties = properties
-    
-  @property
-  def attributes(self):
-    return self.__attributes
-
-  @attributes.setter
-  def attributes(self, attributes):
-    self.__attributes = attributes
-
-  def __str__(self):
-    return "DeviceObject [name=%s, tag=%s, description=%s, properties=%s, attributes=%s]" \
-        % (self.name, self.tag, self.description, self.properties, self.attributes)
+    def __str__(self):
+        return "DeviceObject [name=%s, tag=%s, description=%s, properties=%s, attributes=%s]" \
+                % (self.name, self.tag, self.description, self.properties, self.attributes)

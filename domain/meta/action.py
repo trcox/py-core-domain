@@ -16,80 +16,63 @@
 # @version: 1.0.0
 # *******************************************************************************
 
+import json
 from domain.meta import response as response_module
 
 
 class Action(object):
 
-  def __init__(self, path=None, responses=None):
-    # path used by service for action on a device or sensor
-    self.path = path
-    # responses from get or put request to service
-    self.responses = responses
+    def __init__(self, path=None, responses=None):
+        # path used by service for action on a device or sensor
+        self.path = path
+        # responses from get or put request to service
+        self.responses = responses
 
-  # path used by service for action on a device or sensor
-  @property
-  def path(self):
-    return self.__path
+    #*
+    #* Add a response to the responses and initialize the list if None.
+    #*
+    #* @param response Response object to add.
+    #*
+    def add_response(self, response):
+        if self.responses is None:
+            self.responses = []
+        if not isinstance(response, response_module.Response):
+            raise TypeError("Action response must be of type Response")
+        self.responses.append(response)
 
-  @path.setter
-  def path(self, path):
-    self.__path = path
+    #*
+    #* Remove the Response from the responses list
+    #*
+    #* @param response Response object to remove
+    #*
+    def remove_response(self, response):
+        if self.responses is None:
+            self.responses = []
+        if response in self.responses:
+            self.responses.remove(response)
 
-  # responses from get or put request to service
-  @property
-  def responses(self):
-    return self.__responses
+    #*
+    #* Convenience method to return a list of all expected values from all the associated responses.
+    #*
+    #* @return List of expected value string names
+    #*
+    def all_expected_values(self):
+        if self.responses is None:
+            return []
+        return sum([r.expectedValues for r in self.responses], [])
 
-  @responses.setter
-  def responses(self, responses):
-    self.__responses = responses
+    #*
+    #* Convenience method to return the names of all associated value descriptor names. For Get this
+    #* is just expected value names. For Put, this is expected value names plus parameter names.
+    #*
+    #* @return list of associated value descriptors
+    #*
+    def all_associated_value_descriptors(self):
+        return self.all_expected_values()
 
-  #*
-  #* Add a response to the responses and initialize the list if None.
-  #*
-  #* @param response Response object to add.
-  #*
-  def add_response(self, response):
-    if (self.responses is None):
-      self.responses = []
-    if not isinstance(response, response_module.Response):
-      raise TypeError("Action response must be of type Response")
-    self.responses.append(response)
+    def __str__(self):
+        return "Action [path=%s, responses=%s]" % (self.path, [str(r) for r in self.responses])
 
-  #*
-  #* Remove the Response from the responses list
-  #*
-  #* @param response Response object to remove
-  #*
-  def remove_response(self, response):
-    if (self.responses is None):
-      self.responses = []
-    if response in self.responses:
-      self.responses.remove(response)
-
-  #*
-  #* Convenience method to return a list of all expected values from all the associated responses.
-  #*
-  #* @return List of expected value string names
-  #*
-  def all_expected_values(self):
-    if (self.responses is None):
-      return []
-    return sum([r.expectedValues for r in self.responses], [])
-
-  #*
-  #* Convenience method to return the names of all associated value descriptor names. For Get this
-  #* is just expected value names. For Put, this is expected value names plus parameter names.
-  #*
-  #* @return list of associated value descriptors
-  #*
-  def all_associated_value_descriptors(self):
-    return self.all_expected_values()
-
-  def __str__(self):
-    return "Action [path=%s, responses=%s]" % (self.path, [str(r) for r in self.responses])
-
-  def toJSON(self):
-    return json.dumps(self, default=lambda o: o.__dict__,
-      sort_keys=True, indent=4)
+    def to_json(self):
+        return json.dumps(self, default=lambda o: o.__dict__,
+                          sort_keys=True, indent=4)

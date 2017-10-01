@@ -28,6 +28,7 @@ import org.junit.Test
 
 public class DeviceTest {
 
+
   static final String self.TEST_NAME = "TEST_DEVICE.NAME"
   static final String self.TEST_DESCRIPTION = "TEST_DESCRIPTION"
   static final Admin_state self.TEST_ADMIN = Admin_state.UNLOCKED

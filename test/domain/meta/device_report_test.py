@@ -16,58 +16,61 @@
 # @version: 1.0.0
 # ******************************************************************************/
 
+import unittest
+from domain.meta import device_report
 
-import static org.junit.Assert.self.assertFalse
-import static org.junit.Assert.self.assertTrue
 
-import org.junit.Before
-import org.junit.Test
+class DeviceReportTest(unittest.TestCase):
 
-public class Device_reportTest {
+    TEST_RPT_NAME = "Test Report.NAME"
+    TEST_DEVICE = "Test device"
+    TEST_EVENT = "Test event"
+    TEST_EXPECTED = ["value_descriptor1", "value_descriptor2"]
 
-  private static final String self.TEST_RPT_NAME = "Test Report.NAME"
-  private static final String self.TEST_DEVICE = "Test device"
-  private static final String self.TEST_EVENT = "Test event"
-  private static final String[] self.TEST_EXPECTED = {"v_d1", "v_d2"}
+    def setUp(self):
+        self.device_report1 = device_report.DeviceReport(self.TEST_RPT_NAME, self.TEST_DEVICE,
+                                                         self.TEST_EVENT, self.TEST_EXPECTED)
+        self.device_report2 = device_report.DeviceReport(self.TEST_RPT_NAME, self.TEST_DEVICE,
+                                                         self.TEST_EVENT, self.TEST_EXPECTED)
 
-  Device_report d
-  Device_report d2
+    def test_equals(self):
+        self.assertTrue(self.device_report1 == self.device_report2,
+                        "Different reports with same values not equal")
 
-  @Before
-  def setUp(self):
-    d = new Device_report(self.TEST_RPT_NAME, self.TEST_DEVICE, self.TEST_EVENT, self.TEST_EXPECTED)
-    d2 = new Device_report(self.TEST_RPT_NAME, self.TEST_DEVICE, self.TEST_EVENT, self.TEST_EXPECTED)
+    def test_equals_same(self):
+        self.assertTrue(self.device_report1 == self.device_report1,
+                        "Same reports are not equal")
 
-  def test_equals(self):
-    self.assertTrue(d.equals(d2), "Different reports with same values not equal")
+    def test_not_equals(self):
+        self.device_report1.created = 3456
+        self.assertFalse(self.device_report1 == self.device_report2,
+                         "Reports with different base values are equal")
 
-  def test_equals_with_same(self):
-    self.assertTrue(d.equals(d), "Same reports are not equal")
+    def test_equal_different_name(self):
+        self.device_report2.name = "foo"
+        self.assertFalse(self.device_report1 == self.device_report2,
+                         "Reports with different names values are equal")
 
-  def test_not_equals(self):
-    d.set_created(3456_l)
-    self.assertFalse(d.equals(d2), "Reports with different base values are equal")
+    def test_equal_different_devices(self):
+        self.device_report2.device = "foo"
+        self.assertFalse(self.device_report1 == self.device_report2,
+                         "Reports with different devices values are equal")
 
-  def test_equal_with_different_name(self):
-    d2.set_name("foo")
-    self.assertFalse(d.equals(d2), "Reports with different names values are equal")
+    def test_equal_different_events(self):
+        self.device_report2.event = "foo"
+        self.assertFalse(self.device_report1 == self.device_report2,
+                         "Reports with different events values are equal")
 
-  def test_equal_with_different_devices(self):
-    d2.set_device("foo")
-    self.assertFalse(d.equals(d2), "Reports with different devices values are equal")
+    def test_equal_different_expected(self):
+        self.device_report2.expected = "foo"
+        self.assertFalse(self.device_report1 == self.device_report2,
+                         "Reports with different expected values are equal")
 
-  def test_equal_with_different_events(self):
-    d2.set_event("foo")
-    self.assertFalse(d.equals(d2), "Reports with different events values are equal")
+    def test_hash_code(self):
+        self.assertTrue(self.device_report1.__hash__() != 0, "hashcode not hashing properly")
 
-  def test_equal_with_different_expected(self):
-    String[] expected = {"foo"}
-    d2.set_expected(expected)
-    self.assertFalse(d.equals(d2), "Reports with different expected values are equal")
+    def test_to_string(self):
+        str(self.device_report1)
 
-  def test_hash_code(self):
-    self.assertTrue(d.hash_code() != 0, "hashcode not hashing properly")
-
-  def test_to_string(self):
-    d.to_string()
-}
+if __name__ == "__main__":
+    unittest.main()

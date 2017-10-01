@@ -16,83 +16,32 @@
 # @version: 1.0.0
 # *******************************************************************************
 
-from domain.common import BaseObject
-
-class DeviceReport(BaseObject):
-
-  # non-database identifier for a device report - must be unique
-  @Indexed(unique = true)
-  private String name
-
-  # associated device name - should be a valid and unique device name
-  private String device
-
-  # associated schedule event name - should be a valid and unique schedule event name
-  private String event
-
-  # array of value descriptor names describing the types of data captured in the report
-  private String[] expected
-
-  public Device_report(String name, String device, String event, String[] expected):
-    super()
-    self.name = name
-    self.device = device
-    self.event = event
-    self.expected = expected
-
-  @Suppress_warnings("unused")
-  # used by spring container
-  private Device_report():}
-
-  public String get_name():
-    return name
-
-  def set_name(String name):
-    self.name = name
+from domain.common import base_object
 
 
-  public String get_device():
-    return device
+class DeviceReport(base_object.BaseObject):
 
-  def set_device(String device):
-    self.device = device
+    def __init__(self, name=None, device=None, event=None, expected=None, created=None,
+                 modified=None, origin=None):
+        super(DeviceReport, self).__init__(created, modified, origin)
+        # non-database identifier for a device report - must be unique
+        self.name = name
+        # associated device name - should be a valid and unique device name
+        self.device = device
+        # associated schedule event name - should be a valid and unique schedule event name
+        self.event = event
+        # array of value descriptor names describing the types of data captured in the reports
+        self.expected = expected
 
-  public String get_event():
-    return event
+    def __str__(self):
+        return "DeviceReport [name=%s, device=%s, event=%s, expected=%s, to_string()=%s]" \
+                     % (self.name, self.device, self.event, self.expected,
+                        super(DeviceReport).__init__())
 
-  def set_event(String event):
-    self.event = event
-
-  public String[] get_expected():
-    return expected
-
-  def set_expected(String[] expected):
-    self.expected = expected
-
-  @Override
-  public String to_string():
-    return "Device_report [name=" + name + ", device=" + device + ", event=" + event + ", expected="
-        + Arrays.to_string(expected) + ", to_string()=" + super.to_string() + "]"
-
-  @Override
-  public int hash_code():
-    return new Hash_code_builder().append_super(super.hash_code()).append(name).append(device)
-        .append(event).append(expected).to_hash_code()
-
-  @Override
-  public boolean equals(Object obj):
-    if (!super.equals(obj))
-      return false
-    Device_report other = (Device_report) obj
-    return property_match(other)
-
-  private boolean property_match(Device_report other):
-    if (!string_property_match(self.name, other.name))
-      return false
-    if (!device.equals(other.device))
-      return false
-    if (!event.equals(other.event))
-      return false
-    return string_array_property_match(expected, other.expected)
-
-}
+    def __hash__(self):
+        temp = self
+        if temp.expected is not None:
+            for i, expected in enumerate(self.expected):
+                setattr(temp, "expected%s" % i, expected)
+            temp.expected = None
+        return super(DeviceReport, temp).__hash__()

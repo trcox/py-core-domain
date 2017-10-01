@@ -16,61 +16,25 @@
 # @version: 1.0.0
 # *******************************************************************************
 
+# pylint: disable=C0103
+
 
 class Asset(object):
 
-  @property
-  def adminState(self):
-    raise NotImplementedError()
-    
-  @adminState.setter
-  def adminState(self, adminState):
-    raise NotImplementedError()
-    
-  @property
-  def operatingState(self):
-    raise NotImplementedError()
-    
-  @operatingState.setter
-  def operatingState(self, operatingState):
-    raise NotImplementedError()
-    
-  @property
-  def description(self):
-    raise NotImplementedError()
-    
-  @description.setter
-  def description(self, description):
-    raise NotImplementedError()
-    
-  @property
-  def name(self):
-    raise NotImplementedError()
-    
-  @name.setter
-  def name(self, name):
-    raise NotImplementedError()
-    
-  @property
-  def lastConnected(self):
-    raise NotImplementedError()
-    
-  @lastConnected.setter
-  def lastConnected(self, lastConnected):
-    raise NotImplementedError()
-    
-  @property
-  def lastReported(self):
-    raise NotImplementedError()
-    
-  @lastReported.setter
-  def lastReported(self, lastReported):
-    raise NotImplementedError()
-    
-  @property
-  def addressable(self):
-    raise NotImplementedError()
-    
-  @addressable.setter
-  def addressable(self, addressable):
-    raise NotImplementedError()
+    def __init__(self, adminState=None, operatingState=None, description=None, name=None,
+                 lastConnected=None, lastReported=None, addressable=None):
+        # administrative state - either locked or unlocked (as reported by devices
+        # or device services)
+        self.adminState = adminState
+        # operational state - either enabled or disabled (set by humans or systems)
+        self.operatingState = operatingState
+        self.description = description
+        # non-database identifier for a device - must be unique
+        self.name = name
+        # time in milliseconds that the device last provided any feedback or
+        # responded to any request
+        self.lastConnected = lastConnected
+        # time in milliseconds that the device last reported data to the core
+        self.lastReported = lastReported
+        # address (MQTT topic, HTTP address, serial bus, etc.) for the device
+        self.addressable = addressable

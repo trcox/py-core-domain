@@ -17,57 +17,28 @@
 # *******************************************************************************
 
 from domain.common import base_object
-from domain.meta import get as get_module
-from domain.meta import put as put_module
 
 
 class Command(base_object.BaseObject):
 
-  def __init__(self, name=None, get=None, put=None, created=None, modified=None, origin=None):
-    super(Command, self).__init__(created, modified, origin)
-    self.name = name
-    self.get = get
-    self.put = put
+    def __init__(self, name=None, get=None, put=None, created=None, modified=None, origin=None):
+        super(Command, self).__init__(created, modified, origin)
+        # command name which should be unique on a profile but not necessarily
+        # unique for all profiles
+        self.name = name
+        # get command details
+        self.get = get
+        # gut command details
+        self.put = put
 
-  # command name which should be unique on a profile but not necessarily
-  # unique for all -profiles
-  @property
-  def name(self):
-    return self.__name
+    def __str__(self):
+        return "Command [name=%s, get=%s, put=%s, to_string=%s]" % (self.name, self.get, self.put,
+                                                                    super(Command, self).__str__())
 
-  @name.setter
-  def name(self, name):
-    self.__name = name
-
-  # get command details
-  @property
-  def get(self):
-    return self.__get
-
-  @get.setter
-  def get(self, get):
-    if (get is not None and not isinstance(get, get_module.Get)):
-      raise TypeError("Command get must be of type Get")
-    self.__get = get
-
-  # put command details
-  @property
-  def put(self):
-    return self.__put
-
-  @put.setter
-  def put(self, put):
-    if (put is not None and not isinstance(put, put_module.Put)):
-      raise TypeError("Command put must be of type Put")
-    self.__put = put
-
-  def __str__(self):
-    return "Command [name=%s, get=%s, put=%s, to_string=%s]" % (self.name, self.get, self.put, super(Command, self).__str__())
-
-  def associated_value_descriptors(self):
-    associated_value_descriptor = []
-    if (self.get is not None):
-      associated_value_descriptor.extend(self.get.all_associated_value_descriptors())
-    if (self.put is not None):
-      associated_value_descriptor.extend(self.put.all_associated_value_descriptors())
-    return associated_value_descriptor
+    def associated_value_descriptors(self):
+        associated_value_descriptor = []
+        if self.get is not None:
+            associated_value_descriptor.extend(self.get.all_associated_value_descriptors())
+        if self.put is not None:
+            associated_value_descriptor.extend(self.put.all_associated_value_descriptors())
+        return associated_value_descriptor

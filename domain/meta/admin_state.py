@@ -22,9 +22,9 @@ from enum import Enum
 
 
 class AdminState(Enum):
-  LOCKED = 1
-  UNLOCKED = 2
-  # @Deprecated
-  locked = 3
-  # @Deprecated
-  unlocked = 4
+    LOCKED = 1
+    UNLOCKED = 2
+    # @Deprecated
+    locked = 3
+    # @Deprecated
+    unlocked = 4

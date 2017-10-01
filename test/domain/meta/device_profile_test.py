@@ -53,87 +53,103 @@ class DeviceProfileTest(unittest.TestCase):
         self.assertTrue(self.profile1.commands is None)
         self.profile1.add_command(self.command)
         self.assertTrue(self.command in self.profile1.commands)
-        self.assertEqual(1, len(self.profile1.commands), "Add command failed to preserve collection")
+        self.assertEqual(1, len(self.profile1.commands),
+                         "Add command failed to preserve collection")
 
-    def test_add_commands_where_commands_not_None(self):
+    def test_add_comm_not_none(self):
         self.profile1.commands = []
         self.assertTrue(self.profile1.commands is not None)
         self.profile1.add_command(self.command)
         self.assertTrue(self.command in self.profile1.commands)
-        self.assertEqual(1, len(self.profile1.commands), "Add command failed to preserve collection")
+        self.assertEqual(1, len(self.profile1.commands),
+                         "Add command failed to preserve collection")
 
     def test_remove_command(self):
         self.profile1.add_command(self.command)
-        self.assertTrue(self.command in self.profile1.commands )
+        self.assertTrue(self.command in self.profile1.commands)
         self.profile1.remove_command(self.command)
-        self.assertTrue(len(self.profile1.commands) == 0, "Remove command failed to preserve collection")
+        self.assertTrue(len(self.profile1.commands) == 0,
+                        "Remove command failed to preserve collection")
 
-    def test_remove_command_with_no_commands(self):
+    def test_remove_command_no_commands(self):
         self.assertTrue(self.profile1.commands is None)
         self.profile1.remove_command(self.command)
-        self.assertTrue(len(self.profile1.commands) == 0, "Remove command failed to preserve collection")
+        self.assertTrue(len(self.profile1.commands) == 0,
+                        "Remove command failed to preserve collection")
 
     def test_hash_code(self):
         self.assertTrue(self.profile1.__hash__() != 0, "hashcode not hashing properly")
 
     def test_equals(self):
         self.profile1.deviceResources = self.TEST_DEVICE_RES
-        self.assertTrue(self.profile1 == self.profile2, "Different profiles with same values not equal")
+        self.assertTrue(self.profile1 == self.profile2,
+                        "Different profiles with same values not equal")
 
-    def test_equals_with_same(self):
+    def test_equals_same(self):
         self.assertTrue(self.profile1 == self.profile1, "Same profiles are not equal")
 
     def test_not_equals(self):
         self.profile1.created = 3456
-        self.assertFalse(self.profile1 == self.profile2, "Profiles with different base values are equal")
+        self.assertFalse(self.profile1 == self.profile2,
+                         "Profiles with different base values are equal")
 
-    def test_not_equal_based_on_None_commands(self):
+    def test_not_equal_no_comm(self):
         self.profile2.commands = []
-        self.assertFalse(self.profile1 == self.profile2, "profile with None commands is equal to profile with command list")
+        self.assertFalse(self.profile1 == self.profile2,
+                         "profile with None commands is equal to profile with command list")
 
-    def test_not_equal_based_on_command_lists(self):
+    def test_not_equal_on_command_lists(self):
         commands = []
         commands.append(self.command)
         self.profile1.commands = commands
-        self.assertFalse(self.profile1 == self.profile2, "profiles are equal with different command sets")
+        self.assertFalse(self.profile1 == self.profile2,
+                         "profiles are equal with different command sets")
 
-    def test_not_equal_with_different_labels(self):
+    def test_not_equal_different_labels(self):
         new_labels = ["test"]
         self.profile2.labels = new_labels
-        self.assertFalse(self.profile1 == self.profile2, "profiles with different labels are equal")
+        self.assertFalse(self.profile1 == self.profile2,
+                         "profiles with different labels are equal")
 
-    def test_not_equals_with_None_manufacturer(self):
+    def test_n_equals_no_manufacturer(self):
         self.profile1.manufacturer = None
-        self.assertFalse(self.profile1 == self.profile2, "profile with None as manufacturer is equal to profile with manufacturer")
+        self.assertFalse(self.profile1 == self.profile2,
+                         "profile with None as manufacturer is equal to profile with manufacturer")
 
-    def test_not_equals_with_different_manufacturer(self):
+    def test_n_equals_diff_manufacturer(self):
         self.profile1.manufacturer = "different"
-        self.assertFalse(self.profile1 == self.profile2, "profiles with different manufacturers are equal")
+        self.assertFalse(self.profile1 == self.profile2,
+                         "profiles with different manufacturers are equal")
 
-    def test_not_equals_with_None_model(self):
+    def test_not_equals_no_model(self):
         self.profile1.model = None
-        self.assertFalse(self.profile1 == self.profile2, "profile with None as model is equal to profile with model")
+        self.assertFalse(self.profile1 == self.profile2,
+                         "profile with None as model is equal to profile with model")
 
-    def test_not_equals_with_different_model(self):
+    def test_not_equals_diff_model(self):
         self.profile1.model = "different"
-        self.assertFalse(self.profile1 == self.profile2, "profiles with different models are equal")
+        self.assertFalse(self.profile1 == self.profile2,
+                         "profiles with different models are equal")
 
-    def test_not_equals_with_None_name(self):
+    def test_not_equals_no_name(self):
         self.profile1.name = None
-        self.assertFalse(self.profile1 == self.profile2, "profile with None as name is equal to profile with name")
+        self.assertFalse(self.profile1 == self.profile2,
+                         "profile with None as name is equal to profile with name")
 
-    def test_not_equals_with_different_name(self):
+    def test_not_equals_different_name(self):
         self.profile1.name = "different"
         self.assertFalse(self.profile1 == self.profile2, "profiles with different names are equal")
 
-    def test_not_equal_with_None_objects(self):
+    def test_not_equal_no_objects(self):
         self.profile1.objects = None
-        self.assertFalse(self.profile1 == self.profile2, "profiles with different None objects are equal to profile with objects")
+        self.assertFalse(self.profile1 == self.profile2,
+                         "profiles with different None objects are equal to profile with objects")
 
-    def test_not_equal_with_different_objects(self):
+    def test_not_equal_diff_objects(self):
         new_objects = {"test"}
         self.profile2.objects = new_objects
-        self.assertFalse(self.profile1 == self.profile2, "profiles with different objects are equal")
+        self.assertFalse(self.profile1 == self.profile2,
+                         "profiles with different objects are equal")
 
     def test_to_string(self):
         str(self.profile1)
