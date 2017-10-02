@@ -16,71 +16,74 @@
 # @version: 1.0.0
 # ******************************************************************************/
 
+import unittest
+from domain.meta import property_value
 
-import static org.junit.Assert.self.assertEqual
-import static org.junit.Assert.self.assert_None
 
-import java.math.Big_integer
+class PropertyValueTest(unittest.TestCase):
 
-import org.junit.Before
-import org.junit.Test
+    def setUp(self):
+        self.pvalue1 = property_value.PropertyValue()
 
-public class Property_valueTest {
+    def test_to_big_integer(self):
+        self.pvalue1.mask = "0x00"
+        self.assertEqual(self.pvalue1.to_big_integer("0x01"), 1,
+                         "Property Value convert to big int not working properly")
 
-  private Property_value pv
+    def test_to_big_integer_odd_mask(self):
+        self.pvalue1.mask = "foo"
+        self.assertEqual(self.pvalue1.to_big_integer("10"), 10,
+                         "Property Value convert to big int not working properly")
 
-  @Before
-  def setUp(self):
-    pv = new Property_value()
+    def test_shift(self):
+        self.pvalue1.shift = "0x08"
+        self.assertEqual(self.pvalue1.parse_shift(), 8.0,
+                         "Property Value shift not working properly")
 
-  def test_to_big_integer(self):
-    pv.set_mask("0x00")
-    self.assertEqual("Propety Value convert to big int not working properly", pv.to_big_integer("0x01"),
-        Big_integer.ONE)
+    def test_shift_no_mask(self):
+        self.pvalue1.shift = "10"
+        self.assertEqual(self.pvalue1.parse_shift(), 10.0,
+                         "Property Value shift not working properly")
 
-  def test_to_big_integer_with_unknown_mask(self):
-    pv.set_mask("foo")
-    self.assertEqual("Propety Value convert to big int not working properly", pv.to_big_integer("10"),
-        Big_integer.TEN)
+    def test_scale(self):
+        self.pvalue1.scale = "0x08"
+        self.assertEqual(self.pvalue1.parse_scale(), 8.0,
+                         "Property Value scale not working properly")
 
-  def test_shift(self):
-    pv.set_shift("0x08")
-    self.assertEqual(pv.shift(), new Integer(8), "Propety Value shift not working properly")
+    def test_scalet_no_mask(self):
+        self.pvalue1.scale = "10"
+        self.assertEqual(self.pvalue1.parse_scale(), 10.0,
+                         "Property Value scale not working properly")
 
-  def test_shift_with_no_mask(self):
-    pv.set_shift("10")
-    self.assertEqual(pv.shift(), new Integer(10), "Propety Value shift not working properly")
+    def test_offset(self):
+        self.pvalue1.offset = "0x08"
+        self.assertEqual(self.pvalue1.parse_offset(), 8.0,
+                         "Property Value offset not working properly")
 
-  def test_scale(self):
-    pv.set_scale("0x08")
-    self.assertEqual(pv.scale(), new Float(8), "Propety Value scale not working properly")
+    def test_off_no_mask(self):
+        self.pvalue1.offset = "10"
+        self.assertEqual(self.pvalue1.parse_offset(), 10.0,
+                         "Property Value offset not working properly")
 
-  def test_scalet_with_no_mask(self):
-    pv.set_scale("10")
-    self.assertEqual(pv.scale(), new Float(10), "Propety Value scale not working properly")
+    def test_self_assertion(self):
+        self.pvalue1.assertion = "0x01"
+        self.pvalue1.mask = "foo"
+        self.assertEqual(self.pvalue1.parse_assertion(), 1,
+                         "Property Value self.assertion not working properly")
 
-  def test_offset(self):
-    pv.set_offset("0x08")
-    self.assertEqual(pv.offset(), new Float(8), "Propety Value offset not working properly")
+    def test_self_assertion_no(self):
+        self.pvalue1.assertion = None
+        self.assertEqual(self.pvalue1.parse_assertion(), None,
+                         "Property Value self.assertion not working properly")
 
-  def test_offset_with_no_mask(self):
-    pv.set_offset("10")
-    self.assertEqual(pv.offset(), new Float(10), "Propety Value offset not working properly")
+    def test_self_assertion_no_mask(self):
+        self.pvalue1.assertion = "10"
+        self.pvalue1.mask = "foo"
+        self.assertEqual(self.pvalue1.parse_assertion(), 10,
+                         "Property Value self.assertion not working properly")
 
-  def test_self.assertion(self):
-    pv.set_self.assertion("0x01")
-    pv.set_mask("foo")
-    self.assertEqual(pv.self.assertion(), Big_integer.ONE, "Propety Value self.assertion not working properly")
+    def test_to_string(self):
+        str(self.pvalue1)
 
-  def test_self.assertion_with_None(self):
-    pv.set_self.assertion(None)
-    self.assert_None(pv.self.assertion(), "Propety Value self.assertion not working properly")
-
-  def test_self.assertion_with_no_mask(self):
-    pv.set_self.assertion("10")
-    pv.set_mask("foo")
-    self.assertEqual(pv.self.assertion(), Big_integer.TEN, "Propety Value self.assertion not working properly")
-
-  def test_to_string(self):
-    pv.to_string()
-}
+if __name__ == "__main__":
+    unittest.main()

@@ -16,43 +16,41 @@
 # @version: 1.0.0
 # ******************************************************************************/
 
+import unittest
+from domain.meta import admin_state
+from domain.meta import device_service
 
-import static org.junit.Assert.self.assertFalse
-import static org.junit.Assert.self.assertTrue
 
-import org.junit.Before
-import org.junit.Test
+class DeviceServiceTest(unittest.TestCase):
 
-public class Device_serviceTest {
+    def setUp(self):
+        self.service1 = device_service.DeviceService()
+        self.service1.adminState = admin_state.AdminState.UNLOCKED
+        self.service2 = device_service.DeviceService()
+        self.service2.adminState = admin_state.AdminState.UNLOCKED
 
-  Device_service s
-  Device_service s2
-  Addressable a
+    def test_equals(self):
+        self.assertTrue(self.service1 == self.service2,
+                        "Different services with same values not equal")
 
-  @Before
-  def setUp(self):
-    s = new Device_service()
-    s.set_admin_state(Admin_state.UNLOCKED)
-    s2 = new Device_service()
-    s2.set_admin_state(Admin_state.UNLOCKED)
+    def test_equals_same(self):
+        self.assertTrue(self.service1 == self.service1, "Same services are not equal")
 
-  def test_equals(self):
-    self.assertTrue(s.equals(s2), "Different services with same values not equal")
+    def test_not_equals(self):
+        self.service1.created = 3456
+        self.assertFalse(self.service1 == self.service2,
+                         "services with different base values are equal")
 
-  def test_equals_with_same(self):
-    self.assertTrue(s.equals(s), "Same services are not equal")
+    def test_equal_diff_admin_state(self):
+        self.service2.adminState = admin_state.AdminState.LOCKED
+        self.assertFalse(self.service1 == self.service2,
+                         "Services with different admin state values are equal")
 
-  def test_not_equals(self):
-    s.set_created(3456_l)
-    self.assertFalse(s.equals(s2), "services with different base values are equal")
+    def test_hash_code(self):
+        self.assertTrue(self.service1.__hash__() != 0, "hashcode not hashing properly")
 
-  def test_equal_with_different_admin_state(self):
-    s2.set_admin_state(Admin_state.LOCKED)
-    self.assertFalse(s.equals(s2), "Services with different admin state values are equal")
+    def test_to_string(self):
+        str(self.service1)
 
-  def test_hash_code(self):
-    self.assertTrue(s.hash_code() != 0, "hashcode not hashing properly")
-
-  def test_to_string(self):
-    s.to_string()
-}
+if __name__ == "__main__":
+    unittest.main()

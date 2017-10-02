@@ -16,8 +16,15 @@
 # @version: 1.0.0
 # *******************************************************************************
 
+from enum import Enum
 
 # TODO - remove lowercase versions when all code has been updated
-public enum Operating_state {
-  @Deprecated enabled, @Deprecated disabled, ENABLED, DISABLED
-}
+
+
+class OperatingState(Enum):
+    # @Deprecated
+    enabled = 1
+    # @Deprecated
+    disabled = 2
+    ENABLED = 3
+    DISABLED = 4

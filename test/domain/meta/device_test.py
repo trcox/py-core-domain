@@ -16,147 +16,159 @@
 # @version: 1.0.0
 # ******************************************************************************/
 
+import unittest
+from domain.meta import addressable
+from domain.meta import admin_state
+from domain.meta import device
+from domain.meta import device_profile
+from domain.meta import device_service
+from domain.meta import operating_state
+from domain.meta import protocol
 
-import static org.junit.Assert.self.assertFalse
-import static org.junit.Assert.self.assertTrue
-
-from domain.meta import Admin_state
-from domain.meta import Device
-from domain.meta import Operating_state
-import org.junit.Before
-import org.junit.Test
-
-public class DeviceTest {
+class DeviceTest(unittest.TestCase):
 
 
-  static final String self.TEST_NAME = "TEST_DEVICE.NAME"
-  static final String self.TEST_DESCRIPTION = "TEST_DESCRIPTION"
-  static final Admin_state self.TEST_ADMIN = Admin_state.UNLOCKED
-  static final Operating_state self.TEST_OP = Operating_state.ENABLED
-  static final long self.TEST_LAST_CONNECTED = 1000000
-  static final long self.TEST_LAST_REPORTED = 1000000
-  static final String[] self.TEST_LABELS = {"MODBUS", "TEMP"}
-  static final String self.TEST_LOCATION = "{40lat;45long}"
+    TEST_NAME = "TEST_DEVICE.NAME"
+    TEST_DESCRIPTION = "TEST_DESCRIPTION"
+    TEST_ADMIN = admin_state.AdminState.UNLOCKED
+    TEST_OP = operating_state.OperatingState.ENABLED
+    TEST_LAST_CONNECTED = 1000000
+    TEST_LAST_REPORTED = 1000000
+    TEST_LABELS = ["MODBUS", "TEMP"]
+    TEST_LOCATION = "{40lat;45long}"
 
-  private Device d
-  private Device d2
+    def setUp(self):
+        self.device1 = device.Device()
+        self.device1.adminState = self.TEST_ADMIN
+        self.device1.description = self.TEST_DESCRIPTION
+        self.device1.labels = self.TEST_LABELS
+        self.device1.last_connected = self.TEST_LAST_CONNECTED
+        self.device1.last_reported = self.TEST_LAST_REPORTED
+        self.device1.location = self.TEST_LOCATION
+        self.device1.name = self.TEST_NAME
+        self.device1.operating_state = self.TEST_OP
+        self.device1.addressable = addressable.Addressable("z", protocol.Protocol.HTTP,
+                                                           "b", "c", 0)
+        self.device1.service = device_service.DeviceService()
+        self.device1.service.name = "foo"
+        self.device1.profile = device_profile.DeviceProfile()
+        self.device1.profile.name = "boo"
+        self.device2 = device.Device()
+        self.device2.adminState = self.TEST_ADMIN
+        self.device2.description = self.TEST_DESCRIPTION
+        self.device2.labels = self.TEST_LABELS
+        self.device2.last_connected = self.TEST_LAST_CONNECTED
+        self.device2.last_reported = self.TEST_LAST_REPORTED
+        self.device2.location = self.TEST_LOCATION
+        self.device2.name = self.TEST_NAME
+        self.device2.operating_state = self.TEST_OP
+        self.device2.addressable = addressable.Addressable("z", protocol.Protocol.HTTP,
+                                                           "b", "c", 0)
+        self.device2.service = device_service.DeviceService()
+        self.device2.service.name = "foo"
+        self.device2.profile = device_profile.DeviceProfile()
+        self.device2.profile.name = "boo"
 
-  @Before
-  def setUp(self):
-    d = new Device()
-    d.set_admin_state(self.TEST_ADMIN)
-    d.set_description(self.TEST_DESCRIPTION)
-    d.set_labels(self.TEST_LABELS)
-    d.set_last_connected(self.TEST_LAST_CONNECTED)
-    d.set_last_reported(self.TEST_LAST_REPORTED)
-    d.set_location(self.TEST_LOCATION)
-    d.set_name(self.TEST_NAME)
-    d.set_operating_state(self.TEST_OP)
-    d.set_addressable(new Addressable(Protocol.HTTP, "b", "c", 0), "z")
-    d.set_service(new Device_service())
-    d.get_service().set_name("foo")
-    d.set_profile(new Device_profile())
-    d.get_profile().set_name("boo")
-    d2 = new Device()
-    d2.set_admin_state(self.TEST_ADMIN)
-    d2.set_description(self.TEST_DESCRIPTION)
-    d2.set_labels(self.TEST_LABELS)
-    d2.set_last_connected(self.TEST_LAST_CONNECTED)
-    d2.set_last_reported(self.TEST_LAST_REPORTED)
-    d2.set_location(self.TEST_LOCATION)
-    d2.set_name(self.TEST_NAME)
-    d2.set_operating_state(self.TEST_OP)
-    d2.set_addressable(new Addressable(Protocol.HTTP, "b", "c", 0), "z")
-    d2.set_service(new Device_service())
-    d2.get_service().set_name("foo")
-    d2.set_profile(new Device_profile())
-    d2.get_profile().set_name("boo")
+    def test_equals(self):
+        self.assertTrue(self.device1 == self.device2,
+                        "Different devices with same values not equal")
 
-  def test_equals(self):
-    self.assertTrue(d.equals(d2), "Different devices with same values not equal")
+    def test_equals_same(self):
+        self.assertTrue(self.device1 == self.device1, "Same devices are not equal")
 
-  def test_equals_with_same(self):
-    self.assertTrue(d.equals(d), "Same devices are not equal")
+    def test_not_equals(self):
+        self.device1.created = 3456
+        self.assertFalse(self.device1 == self.device2,
+                         "Devices with different base values are equal")
 
-  def test_not_equals(self):
-    d.set_created(3456_l)
-    self.assertFalse(d.equals(d2), "Devices with different base values are equal")
+    def test_equal_diff_name(self):
+        self.device2.name = "foo"
+        self.assertFalse(self.device1 == self.device2,
+                         "Devices with different names values are equal")
 
-  def test_equal_with_different_name(self):
-    d2.set_name("foo")
-    self.assertFalse(d.equals(d2), "Devices with different names values are equal")
+    def test_equal_diff_admin_state(self):
+        self.device2.adminState = admin_state.AdminState.LOCKED
+        self.assertFalse(self.device1 == self.device2,
+                         "Devices with different admin states values are equal")
 
-  def test_equal_with_different_admin_state(self):
-    d2.set_admin_state(Admin_state.LOCKED)
-    self.assertFalse(d.equals(d2), "Devices with different admin states values are equal")
+    def test_equal_diff_op_state(self):
+        self.device2.operating_state = operating_state.OperatingState.DISABLED
+        self.assertFalse(self.device1 == self.device2,
+                         "Devices with different op states values are equal")
 
-  def test_equal_with_different_op_state(self):
-    d2.set_operating_state(Operating_state.DISABLED)
-    self.assertFalse(d.equals(d2), "Devices with different op states values are equal")
+    def test_equals_both_addressable_no(self):
+        self.device1.addressable = None
+        self.device2.addressable = None
+        self.assertTrue(self.device1 == self.device2,
+                        "Devices with None addressables are not equal")
 
-  def test_equals_with_both_addressable_None(self):
-    d.set_addressable(None)
-    d2.set_addressable(None)
-    self.assertTrue(d.equals(d2), "Devices with None addressables are not equal")
+    def test_equal_an_addressable(self):
+        self.device1.addressable = None
+        self.assertFalse(self.device1 == self.device2,
+                         "Devices with no addressable are equal to device with an addressable")
 
-  def test_equal_with_one_non_None_addressable(self):
-    d.set_addressable(None)
-    self.assertFalse("Devices with None addressable are equal to device with non None addressable",
-        d.equals(d2))
+    def test_equal_diff_addressable(self):
+        self.device1.addressable = addressable.Addressable("a", protocol.Protocol.HTTP,
+                                                           "b", "c", 0)
+        self.assertFalse(self.device1 == self.device2,
+                         "Devices with different addressables are equal")
 
-  def test_equal_with_different_addressable(self):
-    d.set_addressable(new Addressable(Protocol.HTTP, "b", "c", 0), "a")
-    self.assertFalse(d.equals(d2), "Devices with different addressables are equal")
+    def test_equal_diff_last_connected(self):
+        self.device2.last_connected = 5678
+        self.assertFalse(self.device1 == self.device2,
+                         "Devices with different last connected values are equal")
 
-  def test_equal_wit_different_last_connected(self):
-    d2.set_last_connected(5678_l)
-    self.assertFalse(d.equals(d2), "Devices with different last connected values are equal")
+    def test_equal_diff_last_reported(self):
+        self.device2.last_reported = 5678
+        self.assertFalse(self.device1 == self.device2,
+                         "Devices with different last reported values are equal")
 
-  def test_equal_wit_different_last_reported(self):
-    d2.set_last_reported(5678_l)
-    self.assertFalse(d.equals(d2), "Devices with different last reported values are equal")
+    def test_equals_diff_labels(self):
+        new_labels = ["newlabel"]
+        self.device2.labels = new_labels
+        self.assertFalse(self.device1 == self.device2,
+                         "Devices with different labels seen as equal")
 
-  def test_equals_with_differnt_labels(self):
-    String[] new_labels = {"newlabel"}
-    d2.set_labels(new_labels)
-    self.assertFalse(d.equals(d2), "Devices with different labels seen as equal")
+    def test_equal_diff_location(self):
+        self.device2.location = "foobar"
+        self.assertFalse(self.device1 == self.device2,
+                         "Devices with different location values are equal")
 
-  def test_equal_wit_different_location(self):
-    d2.set_location("foobar")
-    self.assertFalse(d.equals(d2), "Devices with different location values are equal")
+    def test_equals_both_services_no(self):
+        self.device1.service = None
+        self.device2.service = None
+        self.assertTrue(self.device1 == self.device2,
+                        "Devices with None as services are not equal")
 
-  def test_equals_with_both_services_None(self):
-    d.set_service(None)
-    d2.set_service(None)
-    self.assertTrue(d.equals(d2), "Devices with None as services are not equal")
+    def test_equals_one_non_no_service(self):
+        self.device1.service = None
+        self.assertFalse(self.device1 == self.device2,
+                         "Devices with None service are equal to device with non None service")
 
-  def test_equals_with_one_non_None_service(self):
-    d.set_service(None)
-    self.assertFalse(d.equals(d2), "Devices with None service are equal to device with non None servce")
+    def test_equal_diff_services(self):
+        self.device1.service = device_service.DeviceService()
+        self.device1.service.name = "boo"
+        self.assertFalse(self.device1 == self.device2, "Devices with different services are equal")
 
-  def test_equal_with_different_services(self):
-    d.set_service(new Device_service())
-    d.get_service().set_name("boo")
-    self.assertFalse(d.equals(d2), "Devices with different services are equal")
+    def test_equals_both_no_profiles(self):
+        self.device1.profile = None
+        self.device2.profile = None
+        self.assertTrue(self.device1 == self.device2, "Devices with None profiles are not equal")
 
-  def test_equals_with_both_None_profiles(self):
-    d.set_profile(None)
-    d2.set_profile(None)
-    self.assertTrue(d.equals(d2), "Devices with None profiles are not equal")
+    def test_equals_one_non_no_profile(self):
+        self.device1.profile = None
+        self.assertFalse(self.device1 == self.device2,
+                         "Devices with None profile are equal to device with non None profile")
 
-  def test_equals_with_one_non_None_profile(self):
-    d.set_profile(None)
-    self.assertFalse("Devices with None profile are equal to device with non None profile",
-        d.equals(d2))
+    def test_equal_diff_profiles(self):
+        self.device2.profile.name = "foo"
+        self.assertFalse(self.device1 == self.device2, "Devices with different profiles are equal")
 
-  def test_equal_with_different_profiles(self):
-    d2.get_profile().set_name("foo")
-    self.assertFalse(d.equals(d2), "Devices with different profiles are equal")
+    def test_hash_code(self):
+        self.assertTrue(self.device1.__hash__() != 0, "hashcode not hashing properly")
 
-  def test_hash_code(self):
-    self.assertTrue(d.hash_code() != 0, "hashcode not hashing properly")
+    def test_to_string(self):
+        str(self.device1)
 
-  def test_to_string(self):
-    d.to_string()
-
-}
+if __name__ == "__main__":
+    unittest.main()

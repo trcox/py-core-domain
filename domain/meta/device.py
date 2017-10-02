@@ -68,3 +68,11 @@ class Device(described_object.DescribedObject, asset.Asset):
                 % (self.name, self.adminState, self.operatingState, self.addressable,
                    self.lastConnected, self.lastReported, self.labels, self.location,
                    self.service, self.profile)
+
+    def __hash__(self):
+        temp = self
+        if temp.labels is not None:
+            for i, label in enumerate(self.labels):
+                setattr(temp, "label%s" % i, label)
+            temp.labels = None
+        return super(Device, temp).__hash__()

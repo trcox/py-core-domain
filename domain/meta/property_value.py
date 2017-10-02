@@ -16,214 +16,110 @@
 # @version: 1.0.0
 # *******************************************************************************
 
+import ast
 
-import java.math.Big_integer
+# pylint: disable=C0103
 
-import org.codehaus.jackson.annotate.Json_ignore
 
-public class Property_value {
+class PropertyValue(object):
 
-  # ValueDescriptor Type of property after transformations
-  private String type
+    def __init__(self, type=None, readWrite=None, minimum=None, maximum=None, defaultValue=None,
+                 size=None, precision=None, word=None, LSB=None, mask=None, shift=None, scale=None,
+                 offset=None, base=None, assertion=None, signed=True):
+        # ValueDescriptor Type of property after transformations
+        self.type = type
 
-  # ReadWrite Permissions set for this property
-  private String read_write
+        # ReadWrite Permissions set for this property
+        self.readWrite = readWrite
 
-  # Minimum value that can be getset from this property
-  private String minimum
+        # Minimum value that can be get/set from this property
+        self.minimum = minimum
 
-  # Maximum value that can be getset from this property
-  private String maximum
+        # Maximum value that can be get/set from this property
+        self.maximum = maximum
 
-  # Default value set to this property if no argument is passed
-  private String default_value
+        # Default value set to this property if no argument is passed
+        self.defaultValue = defaultValue
 
-  # Size of this property in its type
-  # (i.e. bytes for numeric types, characters for string types)
-  private String size
+        # Size of this property in its type
+        # (i.e. bytes for numeric types, characters for string types)
+        self.size = size
 
-  # Required precision of the property
-  private String precision
+        # Required precision of the property
+        self.precision = precision
 
-  # Word size of property used for endianness
-  private String word = "2"
+        # Word size of property used for endianness
+        self.word = word if word is not None else "2"
 
-  # Endianness setting for a property
-  private String LSB
+        # Endianness setting for a property
+        self.LSB = LSB
 
-  # Mask to be applied prior to getset of property
-  private String mask = "0x00"
+        # Mask to be applied prior to get/set of property
+        self.mask = mask if mask is not None else "0x00"
 
-  # Shift to be applied after masking, prior to getset of property
-  private String shift = "0"
+        # Shift to be applied after masking, prior to get/set of property
+        self.shift = shift if shift is not None else "0"
 
-  # Multiplicative factor to be applied after shifting, prior to getset of property
-  private String scale = "1.0"
+        # Multiplicative factor to be applied after shifting, prior to get/set of property
+        self.scale = scale if scale is not None else "1.0"
 
-  # Additive factor to be applied after multiplying, prior to getset of property
-  private String offset = "0.0"
+        # Additive factor to be applied after multiplying, prior to get/set of property
+        self.offset = offset if offset is not None else "0.0"
 
-  # Base for property to be applied to, leave 0 for no power operation
-  # (i.e. base ^ property: 2 ^ 10)
-  private String base = "0"
+        # Base for property to be applied to, leave 0 for no power operation
+        # (i.e. base ^ property: 2 ^ 10)
+        self.base = base if base is not None else "0"
 
-  # Required value of the property, set for checking error state.
-  # Failing an assertion condition will mark the device with an error state
-  private String assertion = None
+        # Required value of the property, set for checking error state.
+        # Failing an assertion condition will mark the device with an error state
+        self.assertion = assertion
 
-  # Treat the property as a signed or unsigned value
-  private Boolean signed = true
+        # Treat the property as a signed or unsigned value
+        self.signed = signed
 
-  public String get_type():
-    return type
+    def to_big_integer(self, string_value):
+        if self.mask[:2] == "0x":
+            return int(string_value, 0)
+        return float(string_value)
 
-  def set_type(String type):
-    self.type = type
+    # replaces Java shift() method
+    def parse_shift(self):
+        return int(self.shift, 0)
 
-  public String get_read_write():
-    return read_write
+    # replaces Java scale() method
+    def parse_scale(self):
+        return float(int(self.scale, 0))
 
-  def set_read_write(String read_write):
-    self.read_write = read_write
+    # replaces Java offset() method
+    def parse_offset(self):
+        return float(int(self.offset, 0))
 
-  public String get_minimum():
-    return minimum
+    # replaces Java LSB() method
+    def parse_lsb(self):
+        return ast.literal_eval(self.LSB)
 
-  def set_minimum(String minimum):
-    self.minimum = minimum
+    # replaces Java base() method
+    def parse_base(self):
+        return int(self.base)
 
-  public String get_maximum():
-    return maximum
+    # replaces Java assertion() method
+    def parse_assertion(self):
+        if self.assertion is None:
+            return None
+        return int(self.assertion, 0)
 
-  def set_maximum(String maximum):
-    self.maximum = maximum
+    # replaces Java word() method
+    def parse_word(self):
+        return int(self.word)
 
-  public String get_default_value():
-    return default_value
+    # replaces Java precision() method
+    def parse_precision(self):
+        return float(self.precision)
 
-  def set_default_value(String default_value):
-    self.default_value = default_value
-
-  public Integer size():
-    return new Integer(size)
-
-  public String get_size():
-    return size
-
-  def set_size(String size):
-    self.size = size
-
-  public Big_integer to_big_integer(String s):
-    Big_integer big
-    if (mask.contains("0x")):
-      big = new Big_integer(s.substring(2), 16)
-      big = new Big_integer(s)
-    return big
-
-  public Big_integer mask():
-    return to_big_integer(mask)
-
-  public String get_mask():
-    return mask
-
-  def set_mask(String mask):
-    self.mask = mask
-
-  public Integer shift():
-    if (shift.contains("0x")):
-      return Integer.parse_unsigned_int(shift.substring(2), 16)
-      return Integer.parse_unsigned_int(shift)
-
-  public String get_shift():
-    return shift
-
-  def set_shift(String shift):
-    self.shift = shift
-
-  public Float scale():
-    if (scale.contains("0x")):
-      return Float.value_of(Integer.parse_unsigned_int(scale.substring(2), 16))
-      return Float.parse_float(scale)
-
-  public String get_scale():
-    return scale
-
-  def set_scale(String scale):
-    self.scale = scale
-
-  public Float offset():
-    if (offset.contains("0x")):
-      return Float.value_of(Integer.parse_unsigned_int(offset.substring(2), 16))
-      return Float.parse_float(offset)
-
-  public String get_offset():
-    return offset
-
-  def set_offset(String offset):
-    self.offset = offset
-
-  @Json_ignore
-  public boolean LSB():
-    return new Boolean(LSB)
-
-  public String get_lSB():
-    return LSB
-
-  def set_lSB(String LSB):
-    self.LSB = LSB
-
-  public Integer base():
-    return new Integer(base)
-
-  public String get_base():
-    return base
-
-  def set_base(String base):
-    self.base = base
-
-  public Big_integer assertion():
-    if (assertion is None)
-      return None
-    if (assertion.contains("0x")):
-      return to_big_integer(assertion.substring(2))
-      return to_big_integer(assertion)
-
-  public String get_assertion():
-    return assertion
-
-  def set_assertion(String assertion):
-    self.assertion = assertion
-
-  public Integer word():
-    return Integer.parse_int(word)
-
-  public String get_word():
-    return word
-
-  def set_word(String word):
-    self.word = word
-
-  public Boolean get_signed():
-    return signed
-
-  def set_signed(Boolean signed):
-    self.signed = signed
-
-  public String get_precision():
-    return precision
-
-  def set_precision(String precision):
-    self.precision = precision
-
-  public Float precision():
-    return Float.parse_float(precision)
-
-  @Override
-  public String to_string():
-    return "Property_value{" + "read_write:" + read_write + ", minimum:" + minimum + ", maximum:"
-        + maximum + ", default_value:" + default_value + ", size:" + size + ", precision:" + precision
-        + ", word:" + word + ", LSB:" + LSB + ", mask:" + mask + ", shift:" + shift + ", scale:"
-        + scale + ", offset:" + offset + ", base:" + base + ", assertion:" + assertion + ", signed:"
-        + signed + '}'
-
-}
+    def __str__(self):
+        return ("PropertyValue[readWrite:%s, minimum:%s, maximum:%s, defaultValue:%s, size:%s,"
+                " precision:%s, word:%s, LSB:%s, mask:%s, shift:%s, scale:%s, offset:%s, base:%s,"
+                " assertion:%s, signed:%s]") % \
+                (self.readWrite, self.minimum, self.maximum, self.defaultValue, self.size,
+                 self.precision, self.word, self.LSB, self.mask, self.shift, self.scale,
+                 self.offset, self.base, self.assertion, self.signed)

@@ -16,40 +16,19 @@
 # @version: 1.0.0
 # *******************************************************************************
 
+from domain.meta import service
 
-import org.apache.commons.lang3.builder.Hash_code_builder
-import org.springframework.data.mongodb.core.mapping.Document
 
-@Document
-@Suppress_warnings("serial")
-public class Device_service extends Service {
+class DeviceService(service.Service):
 
-  # administrative state - either locked or unlocked
-  private Admin_state admin_state
+    def __init__(self, name=None, lastConnected=None, lastReported=None, operatingState=None,
+                 labels=None, addressable=None, adminState=None, destination=None,
+                 description=None, created=None, modified=None, origin=None):
+        super(DeviceService, self).__init__(operatingState, description, name,
+                                            lastConnected, lastReported, addressable, destination,
+                                            created, modified, origin)
+        self.adminState = adminState
 
-  public Admin_state get_admin_state():
-    return admin_state
-
-  def set_admin_state(Admin_state admin_state):
-    self.admin_state = admin_state
-
-  @Override
-  public String to_string():
-    return "Device_service [admin_state=" + admin_state + ", operating_state=" + get_operating_state()
-        + ", addressable=" + get_addressable() + "]"
-
-  @Override
-  public int hash_code():
-    return new Hash_code_builder().append_super(super.hash_code()).append(admin_state).to_hash_code()
-
-  @Override
-  public boolean equals(Object obj):
-    if (!super.equals(obj))
-      return false
-    Device_service other = (Device_service) obj
-    return property_match(other)
-
-  private boolean property_match(Device_service other):
-    return admin_state == other.admin_state
-
-}
+    def __str__(self):
+        return "DeviceService [adminState=%s, operatingState=%s, addressable=%s]" \
+            % (self.adminState, self.operatingState, self.addressable)
