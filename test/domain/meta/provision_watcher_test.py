@@ -12,108 +12,108 @@
 # the License.
 #
 # @microservice: core-domain library
-# @author: Jim White, Dell
+# @author: Tyler Cox, Dell
 # @version: 1.0.0
 # ******************************************************************************/
 
-
-import static org.junit.Assert.self.assertEqual
-import static org.junit.Assert.self.assertFalse
-import static org.junit.Assert.self.assertTrue
-
-import java.util.Hash_map
-import java.util.Map
-
-import org.junit.Before
-import org.junit.Test
-
-public class Provision_watcherTest {
-
-  private static final String self.TEST_NAME = "test pw"
-
-  private Provision_watcher w
-  private Provision_watcher w2
-
-  @Before
-  def setUp(self):
-    Map<String, String> ids = new Hash_map<>()
-    ids.put("z", "y")
-    Device_profile p = new Device_profile()
-    Device_service s = new Device_service()
-    w = new Provision_watcher(self.TEST_NAME)
-    w.set_identifiers(ids)
-    w.set_profile(p)
-    w.set_service(s)
-    w.set_operating_state(Operating_state.ENABLED)
-    w2 = new Provision_watcher(self.TEST_NAME)
-    w2.set_identifiers(ids)
-    w2.set_profile(p)
-    w2.set_service(s)
-    w2.set_operating_state(Operating_state.ENABLED)
+import unittest
+from domain.meta import device_profile
+from domain.meta import device_service
+from domain.meta import operating_state
+from domain.meta import provision_watcher
 
 
-  def test_add_identifier_starting_with_None(self):
-    w.set_identifiers(None)
-    w.add_identifier("a", "b")
-    self.assertEqual("Provision_watcher identifers not added correctly", "b",
-        w.get_identifiers().get("a"))
+class ProvisionWatcherTest(unittest.TestCase):
 
-  def test_add_identifier(self):
-    w.add_identifier("a", "b")
-    self.assertEqual("Provision_watcher identifers not added correctly", "b",
-        w.get_identifiers().get("a"))
+    TEST_NAME = "test pw"
 
-  def test_remove_identifier_starting_with_None(self):
-    w.set_identifiers(None)
-    w.remove_identifier("z")
-    self.assertTrue("Provision_watcher remove identifier not working properly",
-        w.get_identifiers().is_empty())
+    def setUp(self):
+        ids = {}
+        ids["z"] = "y"
+        profile = device_profile.DeviceProfile()
+        service = device_service.DeviceService()
+        self.watcher1 = provision_watcher.ProvisionWatcher(self.TEST_NAME)
+        self.watcher1.identifiers = ids
+        self.watcher1.profile = profile
+        self.watcher1.service = service
+        self.watcher1.operating_state = operating_state.OperatingState.ENABLED
+        self.watcher2 = provision_watcher.ProvisionWatcher(self.TEST_NAME)
+        self.watcher2.identifiers = ids
+        self.watcher2.profile = profile
+        self.watcher2.service = service
+        self.watcher2.operating_state = operating_state.OperatingState.ENABLED
 
-  def test_remove_identifier(self):
-    w.remove_identifier("z")
-    self.assertTrue("Provision_watcher remove identifier not working properly",
-        w.get_identifiers().is_empty())
 
-  def test_equals(self):
-    self.assertTrue(w.equals(w2), "Different watchers with same values not equal")
+    def test_add_no_identifier_starting(self):
+        self.watcher1.identifiers = None
+        self.watcher1.add_identifier("a", "b")
+        self.assertEqual("b", self.watcher1.identifiers["a"],
+                         "Provision_watcher identifiers not added correctly")
 
-  def test_equals_with_same(self):
-    self.assertTrue(w.equals(w), "Same watcher are not equal")
+    def test_add_identifier(self):
+        self.watcher1.add_identifier("a", "b")
+        self.assertEqual("b", self.watcher1.identifiers["a"],
+                         "Provision_watcher identifiers not added correctly")
 
-  def test_not_equals(self):
-    w2.set_created(3456_l)
-    self.assertFalse(w.equals(w2), "Watchers with different base values are equal")
+    def test_remove_no_identifier(self):
+        self.watcher1.identifiers = None
+        self.watcher1.remove_identifier("z")
+        self.assertEqual({}, self.watcher1.identifiers,
+                         "Provision_watcher remove identifier not working properly")
 
-  def test_equal_with_different_name(self):
-    w2.set_name("foo")
-    self.assertFalse(w.equals(w2), "Watchers with different names values are equal")
+    def test_remove_identifier(self):
+        self.watcher1.remove_identifier("z")
+        self.assertEqual({}, self.watcher1.identifiers,
+                         "Provision_watcher remove identifier not working properly")
 
-  def test_equal_with_different_identifiers(self):
-    Map<String, String> ids = new Hash_map<>()
-    ids.put("a", "b")
-    w2.set_identifiers(ids)
-    self.assertFalse(w.equals(w2), "Watchers with different identifer values are equal")
+    def test_equals(self):
+        self.assertTrue(self.watcher1 == self.watcher2,
+                        "Different watchers with same values not equal")
 
-  def test_equal_with_different_profiles(self):
-    Device_profile p = new Device_profile()
-    p.set_name("foo")
-    w2.set_profile(p)
-    self.assertFalse(w.equals(w2), "Watchers with different profiles are equal")
+    def test_equals_same(self):
+        self.assertTrue(self.watcher1 == self.watcher1, "Same watcher are not equal")
 
-  def test_equal_with_different_services(self):
-    Device_service s = new Device_service()
-    s.set_name("foo")
-    w2.set_service(s)
-    self.assertFalse(w.equals(w2), "Watchers with different services are equal")
+    def test_not_equals(self):
+        self.watcher2.created = 3456
+        self.assertFalse(self.watcher1 == self.watcher2,
+                         "Watchers with different base values are equal")
 
-  def test_equal_with_different_op_state(self):
-    w2.set_operating_state(Operating_state.DISABLED)
-    self.assertFalse(w.equals(w2), "Watchers with different op states are equal")
+    def test_equal_diff_name(self):
+        self.watcher2.name = "foo"
+        self.assertFalse(self.watcher1 == self.watcher2,
+                         "Watchers with different names values are equal")
 
-  def test_hash_code(self):
-    self.assertTrue(w.hash_code() != 0, "hashcode not hashing properly")
+    def test_equal_diff_identifiers(self):
+        ids = {}
+        ids["a"] = "b"
+        self.watcher2.identifiers = ids
+        self.assertFalse(self.watcher1 == self.watcher2,
+                         "Watchers with different identifier values are equal")
 
-  def test_to_string(self):
-    w.to_string()
+    def test_equal_diff_profiles(self):
+        profile = device_profile.DeviceProfile()
+        profile.name = "foo"
+        self.watcher2.profile = profile
+        self.assertFalse(self.watcher1 == self.watcher2,
+                         "Watchers with different profiles are equal")
 
-}
+    def test_equal_diff_services(self):
+        service = device_service.DeviceService()
+        service.name = "foo"
+        self.watcher2.service = service
+        self.assertFalse(self.watcher1 == self.watcher2,
+                         "Watchers with different services are equal")
+
+    def test_equal_diff_op_state(self):
+        self.watcher2.operating_state = operating_state.OperatingState.DISABLED
+        self.assertFalse(self.watcher1 == self.watcher2,
+                         "Watchers with different op states are equal")
+
+    def test_hash_code(self):
+        self.assertTrue(self.watcher1.__hash__() != 0, "hashcode not hashing properly")
+
+    def test_to_string(self):
+        str(self.watcher1)
+
+if __name__ == "__main__":
+    unittest.main()

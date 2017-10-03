@@ -12,56 +12,55 @@
 # the License.
 #
 # @microservice: core-domain library
-# @author: Jim White, Dell
+# @author: Tyler Cox, Dell
 # @version: 1.0.0
 # ******************************************************************************/
 
+import unittest
+from domain.meta import put
 
-import static org.junit.Assert.self.assertEqual
-import static org.junit.Assert.self.assertTrue
 
-import java.util.Array_list
-import java.util.List
+class PutTest(unittest.TestCase):
 
-import org.junit.Before
-import org.junit.Test
+    PARAM1 = "param1"
+    PARAM2 = "param2"
 
-public class PutTest {
+    def setUp(self):
+        self.put1 = put.Put()
+        params = []
+        params.append(self.PARAM1)
+        self.put1.parameterNames = params
 
-  private static final String PARAM1 = "param1"
-  private static final String PARAM2 = "param2"
-  private Put p
+    def test_add_parameter_name(self):
+        self.put1.add_parameterName(self.PARAM2)
+        self.assertEqual(2, len(self.put1.parameterNames),
+                         "Put parameters not adding correctly")
 
-  @Before
-  def setUp(self):
-    p = new Put()
-    List<String> params = new Array_list<>()
-    params.add(PARAM1)
-    p.set_parameter_names(params)
+    def test_add_no_parameter_name(self):
+        self.put1.parameterNames = None
+        self.put1.add_parameterName(self.PARAM2)
+        self.assertEqual(1, len(self.put1.parameterNames),
+                         "Put parameters not adding correctly")
 
-  def test_add_parameter_name(self):
-    p.add_parameter_name(PARAM2)
-    self.assertEqual(2, len(p.get_parameter_names()), "Put parameters not adding correctly")
+    def test_remove_parameter_name(self):
+        self.put1.remove_parameterName(self.PARAM1)
+        self.assertEqual([], self.put1.parameterNames,
+                         "Put remove parameter not working correctly")
 
-  def test_add_parameter_name_starting_with_None(self):
-    p.set_parameter_names(None)
-    p.add_parameter_name(PARAM2)
-    self.assertEqual(1, len(p.get_parameter_names()), "Put parameters not adding correctly")
+    def test_remove_no_parameter_name(self):
+        self.put1.parameterNames = None
+        self.put1.remove_parameterName(self.PARAM1)
+        self.assertEqual([], self.put1.parameterNames,
+                         "Put remove parameter not working correctly")
 
-  def test_remove_paremeter_name(self):
-    p.remove_paremeter_name(PARAM1)
-    self.assertTrue(p.get_parameter_names().is_empty(), "Put remove parameter not working correctly")
+    def test_get_parameter_names(self):
+        self.assertEqual(self.PARAM1, self.put1.parameterNames[0],
+                         "Get parameter working properly")
 
-  def test_remove_paremeter_name_starting_with_None(self):
-    p.set_parameter_names(None)
-    p.remove_paremeter_name(PARAM1)
-    self.assertTrue(p.get_parameter_names().is_empty(), "Put remove parameter not working correctly")
+    def test_get_no_parameter_names(self):
+        self.put1.parameterNames = None
+        self.assertEqual([], self.put1.parameterNames,
+                         "Get parameter names not working correctly")
 
-  def test_get_parameter_names(self):
-    self.assertEqual(PARAM1, p.get_parameter_names().get(0), "Get parameter working properly")
-
-  def test_get_parameter_names_starting_with_None(self):
-    p.set_parameter_names(None)
-    self.assertTrue(p.get_parameter_names().is_empty(), "Get parameter names not working correctly")
-
-}
+if __name__ == "__main__":
+    unittest.main()

@@ -6,3 +6,5 @@ from .device_report_test import DeviceReportTest
 from .device_service_test import DeviceServiceTest
 from .device_test import DeviceTest
 from .property_value_test import PropertyValueTest
+from .provision_watcher_test import ProvisionWatcherTest
+from .put_test import PutTest

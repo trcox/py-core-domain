@@ -18,37 +18,41 @@
 
 from .action import Action
 
+# pylint: disable=C0103
+# pylint: disable=W0201
+
+
 class Put(Action):
 
-  def __init__(self, parameterNames=None, path=None, responses=None):
-    super(Put, self).__init__(path, responses)
-    self.parameterNames = parameterNames
+    def __init__(self, parameterNames=None, path=None, responses=None):
+        super(Put, self).__init__(path, responses)
+        self.parameterNames = parameterNames
 
-  # ValueDescriptor names indicating the type and shape of the parameter
-  # value
-  @property
-  def parameterNames(self):
-    if (self.__parameterNames is None):
-      self.__parameterNames = []
-    return self.__parameterNames
+    # ValueDescriptor names indicating the type and shape of the parameter
+    # value
+    @property
+    def parameterNames(self):
+        if self.__parameterNames is None:
+            self.__parameterNames = []
+        return self.__parameterNames
 
-  @parameterNames.setter
-  def parameterNames(self, parameterNames):
-    self.__parameterNames = parameterNames
+    @parameterNames.setter
+    def parameterNames(self, parameterNames):
+        self.__parameterNames = parameterNames
 
-  def add_parameterName(self, param):
-    if (self.parameterNames is None):
-      self.parameterNames = []
-    self.parameterNames.append(param)
+    def add_parameterName(self, param):
+        if self.parameterNames is None:
+            self.parameterNames = []
+        self.parameterNames.append(param)
 
-  def remove_parameter_name(self, param):
-    if (self.parameterNames is not None and param in self.parameterNames):
-      self.parameterNames.remove(param)
+    def remove_parameterName(self, param):
+        if self.parameterNames is not None and param in self.parameterNames:
+            self.__parameterNames.remove(param)
 
-  def __str__(self):
-    return "Put [parameterNames=%s]" % (self.parameterNames)
+    def __str__(self):
+        return "Put [parameterNames=%s]" % (self.parameterNames)
 
-  def all_associated_value_descriptors(self):
-    assoc_value_descriptors = super(Put, self).all_associated_value_descriptors()
-    assoc_value_descriptors.extend(self.parameterNames)
-    return assoc_value_descriptors
+    def all_associated_value_descriptors(self):
+        assoc_value_descriptors = super(Put, self).all_associated_value_descriptors()
+        assoc_value_descriptors.extend(self.parameterNames)
+        return assoc_value_descriptors

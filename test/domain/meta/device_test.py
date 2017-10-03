@@ -12,7 +12,7 @@
 # the License.
 #
 # @microservice: core-domain library
-# @author: Jim White, Dell
+# @author: Tyler Cox, Dell
 # @version: 1.0.0
 # ******************************************************************************/
 

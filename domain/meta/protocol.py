@@ -24,9 +24,11 @@ from enum import Enum
 # TCP - for MQTT and other general TCP based communications
 # MAC - MAC address - low level (example serial) communications
 # ZMQ - Zero MQ communications
+
+
 class Protocol(Enum):
-  HTTP = 1
-  TCP = 2
-  MAC = 3
-  ZMQ = 4
-  OTHER = 5
+    HTTP = 1
+    TCP = 2
+    MAC = 3
+    ZMQ = 4
+    OTHER = 5
