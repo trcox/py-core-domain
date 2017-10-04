@@ -16,105 +16,27 @@
 # @version: 1.0.0
 # *******************************************************************************
 
-
-import org.springframework.data.mongodb.core.index.Indexed
-import org.springframework.data.mongodb.core.mapping.DBRef
-import org.springframework.data.mongodb.core.mapping.Document
-import org.apache.commons.lang3.builder.Hash_code_builder
-from domain.common import BaseObject
-
-@Document
-@Suppress_warnings("serial")
-public class Schedule_event extends BaseObject {
-
-  # non-database identifier for a schedule event - must be unique
-  @Indexed(unique = true)
-  private String name
-
-  # name to associated owning schedule
-  private String schedule
-
-  # address (MQTT topic, HTTP address, serial bus, etc.) for the action (can be empty)
-  @DBRef
-  private Addressable addressable
-
-  # json body for parameters
-  private String parameters
-
-  # service associated with this event
-  private String service
-
-  public Schedule_event(String name, Addressable addressable, String parameters, String schedule,
-      String service):
-    super()
-    self.name = name
-    self.addressable = addressable
-    self.parameters = parameters
-    self.schedule = schedule
-    self.service = service
-
-  @Suppress_warnings("unused")
-  # used by spring container
-  private Schedule_event():}
-
-  public String get_name():
-    return name
-
-  def set_name(String name):
-    self.name = name
-
-  public String get_schedule():
-    return schedule
-
-  def set_schedule(String schedule):
-    self.schedule = schedule
-
-  public Addressable get_addressable():
-    return addressable
-
-  def set_addressable(Addressable addressable):
-    self.addressable = addressable
+from domain.common import base_object
 
 
-  public String get_parameters():
-    return parameters
+class ScheduleEvent(base_object.BaseObject):
 
-  def set_parameters(String parameters):
-    self.parameters = parameters
+    def __init__(self, name=None, addressable=None, parameters=None, schedule=None,
+                 service=None, created=None, modified=None, origin=None):
+        super(ScheduleEvent, self).__init__(created, modified, origin)
+        # non-database identifier for a schedule event - must be unique
+        self.name = name
+        # address (MQTT topic, HTTP address, serial bus, etc.) for the action (can be empty)
+        self.addressable = addressable
+        # json body for parameters
+        self.parameters = parameters
+        # name to associated owning schedule
+        self.schedule = schedule
+        # service associated with this event
+        self.service = service
 
-  public String get_service():
-    return service
-
-  def set_service(String service):
-    self.service = service
-
-  @Override
-  public String to_string():
-    return "Schedule_event [name=" + name + ", addressable=" + addressable + ", parameters="
-        + parameters + ", service=" + service + ", schedule=" + schedule + ", to_string()="
-        + super.to_string() + "]"
-
-  @Override
-  public int hash_code():
-    return new Hash_code_builder().append_super(super.hash_code()).append(name).append(addressable)
-        .append(parameters).append(service).append(schedule).to_hash_code()
-
-  @Override
-  public boolean equals(Object obj):
-    if (!super.equals(obj))
-      return false
-    Schedule_event other = (Schedule_event) obj
-    return property_match(other)
-
-  private boolean property_match(Schedule_event other):
-    if (!string_property_match(name, other.name))
-      return false
-    if (!object_property_match(addressable, other.addressable))
-      return false
-    if (!string_property_match(parameters, other.parameters))
-      return false
-    if (!string_property_match(service, other.service))
-      return false
-    return string_property_match(schedule, other.schedule)
-
-}
+    def __str__(self):
+        return ("ScheduleEvent [name=%s, addressable=%s, parameters=%s, service=%s, schedule=%s,"
+                " to_string()=%s]") \
+                % (self.name, self.addressable, self.parameters, self.service, self.schedule,
+                   super(ScheduleEvent, self).__str__())

@@ -16,59 +16,49 @@
 # @version: 1.0.0
 # *******************************************************************************
 
+import json
+
+# pylint: disable=C0103
+
+
 class Response(object):
 
-  def __init__(self, code=None, description=None, expectedValues=None):
-    self.code = code
-    self.description = description
-    self.expectedValues = expectedValues
+    def __init__(self, code=None, description=None, expectedValues=None):
+        # status code provided with the response (usually an HTTP status code for
+        # REST calls)
+        self.code = code
+        # information about response - error description or good response
+        # information
+        self.description = description
+        self.expectedValues = expectedValues
 
-  # status code provided with the response (usually an HTTP status code for
-  # REST calls)
-  @property
-  def code(self):
-    return self.__code
+    # value descriptors indicating the values returned as part of the response.
+    @property
+    def expectedValues(self):
+        if self.__expectedValues is None:
+            self.__expectedValues = []
+        return self.__expectedValues
 
-  @code.setter
-  def code(self, code):
-    self.__code = code
+    @expectedValues.setter
+    def expectedValues(self, expectedValues):
+        self.__expectedValues = expectedValues
 
-  # information about response - error description or good response
-  # information
-  @property
-  def description(self):
-    return self.__description
+    def add_expected_value(self, expectedValue):
+        if self.expectedValues is None:
+            self.expectedValues = []
+        self.expectedValues.append(expectedValue)
 
-  @description.setter
-  def description(self, description):
-    self.__description = description
+    def remove_expected_value(self, expectedValue):
+        if self.expectedValues is None:
+            self.expectedValues = []
+        if expectedValue not in self.expectedValues:
+            return False
+        return self.expectedValues.remove(expectedValue)
 
-  # value descriptors indicating the values returned as part of the response.
-  @property
-  def expectedValues(self):
-    if self.__expectedValues is None:
-      self.__expectedValues = []
-    return self.__expectedValues
+    def __str__(self):
+        return "Response [code=%s, description=%s, expectedValues=%s]" \
+            % (self.code, self.description, self.expectedValues)
 
-  @expectedValues.setter
-  def expectedValues(self, expectedValues):
-    self.__expectedValues = expectedValues
-
-  def add_expected_value(self, expectedValue):
-    if (self.expectedValues is None):
-      self.expectedValues = []
-    self.expectedValues.append(expectedValue)
-
-  def remove_expected_value(self, expectedValue):
-    if (self.expectedValues is None):
-      self.expectedValues = []
-    if expectedValue not in self.expectedValues:
-      return False
-    return self.expectedValues.remove(expectedValue)
-
-  def __str__(self):
-    return "Response [code=%s, description=%s, expectedValues=%s]" % (self.code, self.description, self.expectedValues)
-
-  def toJSON(self):
-    return json.dumps(self, default=lambda o: o.__dict__,
-      sort_keys=True, indent=4)
+    def to_json(self):
+        return json.dumps(self, default=lambda o: o.__dict__,
+                          sort_keys=True, indent=4)

@@ -8,3 +8,6 @@ from .device_test import DeviceTest
 from .property_value_test import PropertyValueTest
 from .provision_watcher_test import ProvisionWatcherTest
 from .put_test import PutTest
+from .response_test import ResponseTest
+from .schedule_test import ScheduleTest
+from .schedule_event_test import ScheduleEventTest

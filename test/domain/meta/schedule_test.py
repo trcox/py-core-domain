@@ -16,70 +16,75 @@
 # @version: 1.0.0
 # ******************************************************************************/
 
+import unittest
+from domain.meta import schedule
 
-import static org.junit.Assert.self.assertFalse
-import static org.junit.Assert.self.assertTrue
 
-import org.junit.Before
-import org.junit.Test
+class ScheduleTest(unittest.TestCase):
 
-public class ScheduleTest {
+    TEST_SCHEDULE_NAME = "test schedule"
+    # defaults to now
+    TEST_START = ""
+    # defaults to ZDT MAX
+    TEST_END = ""
+    TEST_FREQUENCY = "PT2_s"
+    TEST_CRON = "0 0 12 # # ?"
+    TEST_RUN_ONCE = False
 
-  private static final String self.TEST_SCHEDULE_NAME = "test schedule"
-  private static final String self.TEST_START = ""; # defaults to now
-  private static final String self.TEST_END = ""; # defaults to ZDT MAX
-  private static final String self.TEST_FREQUENCY = "PT2_s"
-  private static final String self.TEST_CRON = "0 0 12 # # ?"
-  private static final boolean self.TEST_RUN_ONCE = false
+    def setUp(self):
+        self.schedule1 = schedule.Schedule(self.TEST_SCHEDULE_NAME, self.TEST_START, self.TEST_END,
+                                           self.TEST_FREQUENCY, self.TEST_CRON, self.TEST_RUN_ONCE)
+        self.schedule2 = schedule.Schedule(self.TEST_SCHEDULE_NAME, self.TEST_START, self.TEST_END,
+                                           self.TEST_FREQUENCY, self.TEST_CRON, self.TEST_RUN_ONCE)
 
-  private Schedule s
-  private Schedule s2
+    def test_equals(self):
+        self.assertTrue(self.schedule1 == self.schedule2,
+                        "Different schedules with same values not equal")
 
-  @Before
-  def setUp(self):
-    s = new Schedule(self.TEST_SCHEDULE_NAME, self.TEST_START, self.TEST_END, self.TEST_FREQUENCY, self.TEST_CRON,
-        TEST_RUN_ONCE)
-    s2 = new Schedule(self.TEST_SCHEDULE_NAME, self.TEST_START, self.TEST_END, self.TEST_FREQUENCY, self.TEST_CRON,
-        TEST_RUN_ONCE)
+    def test_equals_same(self):
+        self.assertTrue(self.schedule1 == self.schedule1,
+                        "Same schedules are not equal")
 
-  def test_equals(self):
-    self.assertTrue(s.equals(s2), "Different schedules with same values not equal")
+    def test_not_equals(self):
+        self.schedule1.created = 3456
+        self.assertFalse(self.schedule1 == self.schedule2,
+                         "Schedules with different base values are equal")
 
-  def test_equals_with_same(self):
-    self.assertTrue(s.equals(s), "Same schedules are not equal")
+    def test_equal_diff_name(self):
+        self.schedule2.name = "foo"
+        self.assertFalse(self.schedule1 == self.schedule2,
+                         "Schedules with different names values are equal")
 
-  def test_not_equals(self):
-    s.set_created(3456_l)
-    self.assertFalse(s.equals(s2), "Schedules with different base values are equal")
+    def test_equal_diff_start(self):
+        self.schedule2.start = "start"
+        self.assertFalse(self.schedule1 == self.schedule2,
+                         "Schedules with different start values are equal")
 
-  def test_equal_with_different_name(self):
-    s2.set_name("foo")
-    self.assertFalse(s.equals(s2), "Schedules with different names values are equal")
+    def test_equal_diff_end(self):
+        self.schedule2.end = "end"
+        self.assertFalse(self.schedule1 == self.schedule2,
+                         "Schedules with different ends values are equal")
 
-  def test_equal_with_different_start(self):
-    s2.set_start("start")
-    self.assertFalse(s.equals(s2), "Schedules with different start values are equal")
+    def test_equal_diff_freq(self):
+        self.schedule2.frequency = "frequency"
+        self.assertFalse(self.schedule1 == self.schedule2,
+                         "Schedules with different frequency values are equal")
 
-  def test_equal_with_different_end(self):
-    s2.set_end("end")
-    self.assertFalse(s.equals(s2), "Schedules with different ends values are equal")
+    def test_equal_diff_cron(self):
+        self.schedule2.cron = "cron"
+        self.assertFalse(self.schedule1 == self.schedule2,
+                         "Schedules with different cron values are equal")
 
-  def test_equal_with_different_freq(self):
-    s2.set_frequency("frequency")
-    self.assertFalse(s.equals(s2), "Schedules with different frequency values are equal")
+    def test_equal_diff_run_once(self):
+        self.schedule2.runOnce = True
+        self.assertFalse(self.schedule1 == self.schedule2,
+                         "Schedules with different run once values are equal")
 
-  def test_equal_with_different_cron(self):
-    s2.set_cron("cron")
-    self.assertFalse(s.equals(s2), "Schedules with different cron values are equal")
+    def test_hash_code(self):
+        self.assertTrue(self.schedule1.__hash__() != 0, "hashcode not hashing properly")
 
-  def test_equal_with_different_run_once(self):
-    s2.set_run_once(true)
-    self.assertFalse(s.equals(s2), "Schedules with different run once values are equal")
+    def test_to_string(self):
+        str(self.schedule1)
 
-  def test_hash_code(self):
-    self.assertTrue(s.hash_code() != 0, "hashcode not hashing properly")
-
-  def test_to_string(self):
-    s.to_string()
-
-}
+if __name__ == "__main__":
+    unittest.main()

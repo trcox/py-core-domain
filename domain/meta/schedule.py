@@ -16,121 +16,35 @@
 # @version: 1.0.0
 # *******************************************************************************
 
-
-import org.apache.commons.lang3.builder.Hash_code_builder
-from domain.common import BaseObject
-import org.springframework.data.mongodb.core.index.Indexed
-import org.springframework.data.mongodb.core.mapping.Document
+from domain.common import base_object
 
 
-@Document
-@Suppress_warnings("serial")
-public class Schedule extends BaseObject {
+class Schedule(base_object.BaseObject):
 
-  # TODO - make protected after changes to test package
-  public static final String[] DATETIME_FORMATS = {"yyyy_mMdd'T'HHmmss"}
+    # TODO - make protected after changes to test package
+    DATETIME_FORMATS = ["yyyy_mMdd'T'HHmmss"]
 
-  # non-database identifier for a schedule- must be unique
-  @Indexed(unique = true)
-  private String name
+    def __init__(self, name=None, start=None, end=None, frequency=None, cron=None, runOnce=False,
+                 created=None, modified=None, origin=None):
+        super(Schedule, self).__init__(created, modified, origin)
+        # non-database identifier for a schedule- must be unique
+        self.name = name
+        # Start time in ISO 8601 format YYYYMMDD'T'HHmmss
+        # @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyymmdd'T'HHmmss")
+        self.start = start
+        # End time in ISO 8601 format YYYYMMDD'T'HHmmss
+        # @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyymmdd'T'HHmmss")
+        self.end = end
+        # how frequently should the event occur
+        self.frequency = frequency
+        # cron styled regular expression indicating how often the action under schedule should
+        # occur. Use either runOnce, frequency or cron and not all.
+        self.cron = cron
+        # boolean indicating that this schedules runs one time - at the time indicated by the start
+        self.runOnce = runOnce
 
-  # Start time in ISO 8601 format YYYYMMDD'T'HHmmss
-  # @Json_format(shape = Json_format.Shape.STRING, pattern = "yyyymmdd'T'HHmmss")
-  private String start
-
-  # Start time in ISO 8601 format YYYYMMDD'T'HHmmss
-  # @Json_format(shape = Json_format.Shape.STRING, pattern = "yyyymmdd'T'HHmmss")
-  private String end
-
-  # how frequently should the event occur
-  private String frequency
-
-  # cron styled regular expression indicating how often the action under schedule should occur. Use
-  # either run_once, frequency or cron and not all.
-  private String cron
-
-  # boolean indicating that this schedules runs one time - at the time indicated by the start
-  private boolean run_once
-
-  public Schedule(String name, String start, String end, String frequency, String cron,
-      boolean run_once):
-    super()
-    self.name = name
-    self.start = start
-    self.end = end
-    self.frequency = frequency
-    self.cron = cron
-    self.run_once = run_once
-
-  @Suppress_warnings("unused")
-  # used by spring container
-  private Schedule():}
-
-  public String get_name():
-    return name
-
-  def set_name(String name):
-    self.name = name
-
-  public String get_start():
-    return start
-
-  def set_start(String start):
-    self.start = start
-
-  public String get_end():
-    return end
-
-  def set_end(String end):
-    self.end = end
-
-  public String get_frequency():
-    return frequency
-
-  def set_frequency(String frequency):
-    self.frequency = frequency
-
-  public String get_cron():
-    return cron
-
-  def set_cron(String cron):
-    self.cron = cron
-
-  public boolean get_run_once():
-    return run_once
-
-  def set_run_once(boolean run_once):
-    self.run_once = run_once
-
-  @Override
-  public String to_string():
-    return "Schedule [name=" + name + ", start=" + start + ", end=" + end + ", frequency="
-        + frequency + ", cron=" + cron + ", run_once=" + run_once + ", to_string()=" + super.to_string()
-        + "]"
-
-  @Override
-  public int hash_code():
-    return new Hash_code_builder().append_super(super.hash_code()).append(name).append(start)
-        .append(end).append(frequency).append(cron).append(run_once).to_hash_code()
-
-  @Override
-  public boolean equals(Object obj):
-    if (!super.equals(obj))
-      return false
-    Schedule other = (Schedule) obj
-    return property_match(other)
-
-  private boolean property_match(Schedule other):
-    if (!string_property_match(name, other.name))
-      return false
-    if (!string_property_match(start, other.start))
-      return false
-    if (!string_property_match(end, other.end))
-      return false
-    if (!string_property_match(frequency, other.frequency))
-      return false
-    if (!string_property_match(cron, other.cron))
-      return false
-    return (run_once == other.run_once)
-
-}
+    def __str__(self):
+        return ("Schedule [name=%s, start=%s, end=%s, frequency=%s, cron=%s, runOnce=%s,"
+                " to_string()=%s]") \
+                % (self.name, self.start, self.end, self.frequency, self.cron, self.runOnce,
+                   super(Schedule, self).__str__())

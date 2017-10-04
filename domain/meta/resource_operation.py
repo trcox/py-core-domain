@@ -17,83 +17,19 @@
 # *******************************************************************************
 
 
-import java.util.Array_list
-import java.util.Hash_map
-import java.util.List
-import java.util.Map
+class ResourceOperation(object):
 
-public class Resource_operation {
+    def __init__(self, operation=None, object=None, property=None, parameter=None, mappings=None,
+                 index=None):
+        self.operation = operation
+        self.object = object
+        self.property = property if property is not None else "value"
+        self.parameter = parameter if parameter is not None else object
+        self.mappings = mappings
+        self.index = index if index is not None else "1"
 
-  private String index
-  private String operation
-  private String object
-  private String property
-  private String parameter
-  private String resource
-  private List<String> secondary = new Array_list<>()
-  private Map<String, String> mappings = new Hash_map<>()
-
-  public Resource_operation():}
-
-  public Resource_operation(String operation, String object):
-    self.operation = operation
-    self.object = object
-    self.property = "value"
-    self.parameter = object
-    self.index = "1"
-
-  public String get_operation():
-    return operation
-
-  def set_operation(String operation):
-    self.operation = operation
-
-  public String get_object():
-    return object
-
-  def set_object(String object):
-    self.object = object
-
-  public String get_property():
-    return property
-
-  def set_property(String property):
-    self.property = property
-
-  public String get_parameter():
-    return parameter
-
-  def set_parameter(String parameter):
-    self.parameter = parameter
-
-  public String get_index():
-    return index
-
-  def set_index(String index):
-    self.index = index
-
-  @Override
-  public String to_string():
-    return "Resource_operation [operation=" + operation + ", object=" + object + ", property="
-        + property + ", parameter=" + parameter + ", mappings=" + mappings + ", index=" + index
-        + "]"
-
-  public List<String> get_secondary():
-    return secondary
-
-  def set_secondary(List<String> secondary):
-    self.secondary = secondary
-
-  public Map<String, String> get_mappings():
-    return mappings
-
-  def set_mappings(Map<String, String> mappings):
-    self.mappings = mappings
-
-  public String get_resource():
-    return resource
-
-  def set_resource(String resource):
-    self.resource = resource
-
-}
+    def __str__(self):
+        return ("ResourceOperation [operation=%s, object=%s, property=%s, parameter=%s,"
+                " mappings=%s, index=%s]") \
+               % (self.operation, self.object, self.property, self.parameter, self.mappings,
+                  self.index)

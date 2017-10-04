@@ -16,38 +16,32 @@
 # @version: 1.0.0
 # ******************************************************************************/
 
+import unittest
+from domain.meta import response
 
-import static org.junit.Assert.self.assertEqual
 
-import java.util.Array_list
-import java.util.List
+class ResponseTest(unittest.TestCase):
 
-import org.junit.Before
-import org.junit.Test
+    TEST_CODE = "200"
+    TEST_DECRIPTION = "ok"
+    TEST_VALUE1 = "temperature"
+    TEST_VALUE2 = "humidity"
 
-public class ResponseTest {
+    def setUp(self):
+        exp_values = []
+        exp_values.append(self.TEST_VALUE1)
+        exp_values.append(self.TEST_VALUE2)
+        self.response1 = response.Response(self.TEST_CODE, self.TEST_DECRIPTION, exp_values)
 
-  private static final String self.TEST_CODE = "200"
-  private static final String self.TEST_DECRIPTION = "ok"
-  private static final String self.TEST_VALUE1 = "temperature"
-  private static final String self.TEST_VALUE2 = "humidity"
-  private Response r
+    def test_add_expected_value(self):
+        self.response1.add_expected_value("moisture")
+        self.assertEqual(3, len(self.response1.expectedValues),
+                         "Expected values list was not appended to appropriately")
 
-  @Before
-  def setUp(self):
-    List<String> exp_values = new Array_list<>()
-    exp_values.add(self.TEST_VALUE1)
-    exp_values.add(self.TEST_VALUE2)
-    r = new Response(self.TEST_CODE, self.TEST_DECRIPTION, exp_values)
+    def test_remove_expected_value(self):
+        self.response1.remove_expected_value(self.TEST_VALUE1)
+        self.assertEqual(1, len(self.response1.expectedValues),
+                         "Expected value was not removed from list appropriately")
 
-  def test_add_expected_value(self):
-    r.add_expected_value("moisture")
-    self.assertEqual("Expected values list was not added to appropriately", 3,
-        len(r.get_expected_values()))
-
-  def test_remove_expected_value(self):
-    r.remove_expected_value(self.TEST_VALUE1)
-    self.assertEqual("Expected value was not removed from list appropriately", 1,
-        len(r.get_expected_values()))
-
-}
+if __name__ == "__main__":
+    unittest.main()
