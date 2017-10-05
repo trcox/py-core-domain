@@ -48,11 +48,3 @@ class ValueDescriptor(described_object.DescribedObject):
                 "formatting=%s, labels=%s]") \
                 % (self.name, self.min, self.max, self.type, self.uomLabel, self.defaultValue,
                    self.formatting, self.labels)
-
-    def __hash__(self):
-        temp = self
-        if temp.labels is not None:
-            for i, label in enumerate(self.labels):
-                setattr(temp, "label%s" % i, label)
-            temp.labels = None
-        return super(ValueDescriptor, temp).__hash__()

@@ -35,22 +35,9 @@ class Device(described_object.DescribedObject, asset.Asset):
                  lastConnected=None, lastReported=None, addressable=None, labels=None,
                  location=None, service=None, profile=None, created=None, modified=None,
                  origin=None):
-        super(Device, self).__init__(created=created, modified=modified, origin=origin)
-        # administrative state - either locked or unlocked (as reported by devices
-        # or device services)
-        self.adminState = adminState
-        # operational state - either enabled or disabled (set by humans or systems)
-        self.operatingState = operatingState
-        self.description = description
-        # non-database identifier for a device - must be unique
-        self.name = name
-        # time in milliseconds that the device last provided any feedback or
-        # responded to any request
-        self.lastConnected = lastConnected
-        # time in milliseconds that the device last reported data to the core
-        self.lastReported = lastReported
-        # address (MQTT topic, HTTP address, serial bus, etc.) for the device
-        self.addressable = addressable
+        described_object.DescribedObject.__init__(self, description, created, modified, origin)
+        asset.Asset.__init__(self, adminState, operatingState, description, name, lastConnected,
+                             lastReported, addressable)
         # tags or other labels applied to the device for search or other
         # identification needs
         self.labels = labels
@@ -68,11 +55,3 @@ class Device(described_object.DescribedObject, asset.Asset):
                 % (self.name, self.adminState, self.operatingState, self.addressable,
                    self.lastConnected, self.lastReported, self.labels, self.location,
                    self.service, self.profile)
-
-    def __hash__(self):
-        temp = self
-        if temp.labels is not None:
-            for i, label in enumerate(self.labels):
-                setattr(temp, "label%s" % i, label)
-            temp.labels = None
-        return super(Device, temp).__hash__()

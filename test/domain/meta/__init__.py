@@ -11,3 +11,4 @@ from .put_test import PutTest
 from .response_test import ResponseTest
 from .schedule_test import ScheduleTest
 from .schedule_event_test import ScheduleEventTest
+from .service_test import ServiceTest

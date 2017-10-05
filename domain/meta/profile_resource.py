@@ -17,30 +17,11 @@
 # *******************************************************************************
 
 
-import java.util.List
+class ProfileResource(object):
 
-public class Profile_resource {
-
-  private String name
-  private List<Resource_operation> get
-  private List<Resource_operation> set
-
-  public String get_name():
-    return name
-
-  def set_name(String key):
-    self.name = key
-
-  public List<Resource_operation> get_get():
-    return get
-
-  def set_get(List<Resource_operation> get):
-    self.get = get
-
-  public List<Resource_operation> get_set():
-    return set
-
-  def set_set(List<Resource_operation> set):
-    self.set = set
-
-}
+    def __init__(self, name=None, get=None, set=None):
+        self.name = name
+        # List of resource operations for get commands
+        self.get = get
+        # List of resource operations for set commands
+        self.set = set

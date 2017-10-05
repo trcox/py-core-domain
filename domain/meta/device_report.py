@@ -37,11 +37,3 @@ class DeviceReport(base_object.BaseObject):
         return "DeviceReport [name=%s, device=%s, event=%s, expected=%s, to_string()=%s]" \
                      % (self.name, self.device, self.event, self.expected,
                         super(DeviceReport).__init__())
-
-    def __hash__(self):
-        temp = self
-        if temp.expected is not None:
-            for i, expected in enumerate(self.expected):
-                setattr(temp, "expected%s" % i, expected)
-            temp.expected = None
-        return super(DeviceReport, temp).__hash__()

@@ -19,6 +19,8 @@
 from domain.common import described_object
 from domain.meta import command as comm
 
+# pylint: disable=C0103
+
 
 class DeviceProfile(described_object.DescribedObject):
 
@@ -81,15 +83,3 @@ class DeviceProfile(described_object.DescribedObject):
                 " commands=%s, resources=%s]") \
                 % (self.name, self.manufacturer, self.model, self.labels, self.deviceResources,
                    self.commands, self.resources)
-
-    def __hash__(self):
-        temp = self
-        if temp.labels is not None:
-            for i, label in enumerate(self.labels):
-                setattr(temp, "label%s" % i, label)
-            temp.labels = None
-        if temp.commands is not None:
-            for i, command in enumerate(self.commands):
-                setattr(temp, "command%s" % i, command)
-            temp.commands = None
-        return super(DeviceProfile, temp).__hash__()

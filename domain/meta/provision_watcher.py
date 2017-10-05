@@ -19,6 +19,8 @@
 from domain.common import base_object
 from domain.meta import operating_state
 
+# pylint: disable=C0103
+
 
 class ProvisionWatcher(base_object.BaseObject):
 
@@ -62,11 +64,3 @@ class ProvisionWatcher(base_object.BaseObject):
         return ("ProvisionWatcher [name=%s identifiers=%s, service=%s, profile=%s,"
                 " operatingState=%s]") \
                 % (self.name, self.identifiers, self.service, self.profile, self.operatingState)
-
-    def __hash__(self):
-        temp = self
-        if temp.identifiers is not None:
-            for key, value in self.identifiers.items():
-                setattr(temp, "key%s" % key, value)
-            temp.identifiers = None
-        return super(ProvisionWatcher, temp).__hash__()

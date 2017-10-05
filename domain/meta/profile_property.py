@@ -16,28 +16,14 @@
 # @version: 1.0.0
 # *******************************************************************************
 
+# pylint: disable=C0103
 
-import java.io.Serializable
 
-@Suppress_warnings("serial")
-public class Profile_property implements Serializable{
-  private Property_value value
-  private Units units
+class ProfileProperty(object):
 
-  public Property_value get_value():
-    return value
+    def __init__(self, value=None, units=None):
+        self.value = value
+        self.units = units
 
-  def set_value(Property_value value):
-    self.value = value
-
-  public Units get_units():
-    return units
-
-  def set_units(Units units):
-    self.units = units
-
-  @Override
-  public String to_string():
-    return "Profile_property [value=" + value + ", units=" + units + "]"
-
-}
+    def __str__(self):
+        return "ProfileProperty [value=%s, units=%s]" % (self.value, self.units)

@@ -16,29 +16,12 @@
 # @version: 1.0.0
 # *******************************************************************************
 
+# pylint: disable=C0103
 
-public class Units {
 
-  private String type
-  private String read_write
-  private String default_value
+class Units(object):
 
-  public String get_type():
-    return type
-
-  def set_type(String type):
-    self.type = type
-
-  public String get_read_write():
-    return read_write
-
-  def set_read_write(String read_write):
-    self.read_write = read_write
-
-  public String get_default_value():
-    return default_value
-
-  def set_default_value(String default_value):
-    self.default_value = default_value
-
-}
+    def __init__(self, type=None, readWrite=None, defaultValue=None):
+        self.type = type
+        self.readWrite = readWrite
+        self.defaultValue = defaultValue

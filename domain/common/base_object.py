@@ -16,6 +16,7 @@
 # @version: 1.0.0
 # *******************************************************************************
 
+import collections
 import json
 
 
@@ -39,7 +40,22 @@ class BaseObject(object):
         return not self == other
 
     def __hash__(self):
-        return hash(tuple(sorted(self.__dict__.items())))
+        hash_value = None
+        try:
+            hash_value = hash(tuple(sorted(self.__dict__.items())))
+        except TypeError:
+            hash_value = self.__hash__helper__()
+        return hash_value
+
+    # Method for hashing unhashable attribute values
+    def __hash__helper__(self):
+        temp = self
+        for item in list(self.__dict__):
+            if not isinstance(getattr(self, item), collections.Hashable):
+                for i, element in enumerate(getattr(temp, item)):
+                    setattr(temp, "%s%s" % (item, i), element)
+                setattr(temp, item, None)
+        return temp
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__,

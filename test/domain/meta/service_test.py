@@ -16,86 +16,93 @@
 # @version: 1.0.0
 # ******************************************************************************/
 
+import unittest
+from domain.meta import addressable
+from domain.meta import device_service
+from domain.meta import operating_state
+from domain.meta import protocol
 
-import static org.junit.Assert.self.assertFalse
-import static org.junit.Assert.self.assertTrue
 
-import org.junit.Before
-import org.junit.Test
+class ServiceTest(unittest.TestCase):
 
-public class ServiceTest {
+    TEST_SERVICE_NAME = "test service"
+    TEST_OP = operating_state.OperatingState.ENABLED
+    TEST_lastConnected = 1000000
+    TEST_lastReported = 1000000
+    TEST_LABELS = ["MODBUS", "TEMP"]
+    TEST_ADDR_NAME = "TEST_ADDR.NAME"
+    TEST_PROTOCOL = protocol.Protocol.HTTP
+    TEST_ADDRESS = "localhost"
+    TEST_PORT = 48089
+    TEST_PATH = "/api/v1/device"
 
-  private static final String self.TEST_SERVICE_NAME = "test service"
-  private static final Operating_state self.TEST_OP = Operating_state.ENABLED
-  private static final long self.TEST_LAST_CONNECTED = 1000000
-  private static final long self.TEST_LAST_REPORTED = 1000000
-  private static final String[] self.TEST_LABELS = {"MODBUS", "TEMP"}
-  private static final String self.TEST_ADDR_NAME = "TEST_ADDR.NAME"
-  private static final Protocol self.TEST_PROTOCOL = Protocol.HTTP
-  private static final String self.TEST_ADDRESS = "localhost"
-  private static final int self.TEST_PORT = 48089
-  private static final String self.TEST_PATH = "/api/v1/device"
+    def setUp(self):
+        address1 = addressable.Addressable(self.TEST_ADDR_NAME, self.TEST_PROTOCOL,
+                                           self.TEST_ADDRESS, self.TEST_PATH, self.TEST_PORT)
+        # must use DeviceService since Service is abstract
+        self.service1 = device_service.DeviceService()
+        self.service1.name = self.TEST_SERVICE_NAME
+        self.service1.lastConnected = self.TEST_lastConnected
+        self.service1.lastReported = self.TEST_lastReported
+        self.service1.operatingState = self.TEST_OP
+        self.service1.labels = self.TEST_LABELS
+        self.service1.addressable = address1
+        self.service2 = device_service.DeviceService()
+        self.service2 = device_service.DeviceService()
+        self.service2.name = self.TEST_SERVICE_NAME
+        self.service2.lastConnected = self.TEST_lastConnected
+        self.service2.lastReported = self.TEST_lastReported
+        self.service2.operatingState = self.TEST_OP
+        self.service2.labels = self.TEST_LABELS
+        self.service2.addressable = address1
 
-  private Service s, s2
-  private Addressable a
+    def test_equals(self):
+        self.assertTrue(self.service1 == self.service2,
+                        "Different service with same values not equal")
 
-  @Before
-  def setUp(self):
-    a = new Addressable(self.TEST_ADDR_NAME, self.TEST_PROTOCOL, self.TEST_ADDRESS, self.TEST_PATH, self.TEST_PORT)
-    # must use Device_service since Service is abstract
-    s = new Device_service()
-    s.set_name(self.TEST_SERVICE_NAME)
-    s.set_last_connected(self.TEST_LAST_CONNECTED)
-    s.set_last_reported(self.TEST_LAST_REPORTED)
-    s.set_operating_state(self.TEST_OP)
-    s.set_labels(self.TEST_LABELS)
-    s.set_addressable(a)
-    s2 = new Device_service()
-    s2 = new Device_service()
-    s2.set_name(self.TEST_SERVICE_NAME)
-    s2.set_last_connected(self.TEST_LAST_CONNECTED)
-    s2.set_last_reported(self.TEST_LAST_REPORTED)
-    s2.set_operating_state(self.TEST_OP)
-    s2.set_labels(self.TEST_LABELS)
-    s2.set_addressable(a)
+    def test_equals_same(self):
+        self.assertTrue(self.service1 == self.service1, "Same service are not equal")
 
-  def test_equals(self):
-    self.assertTrue(s.equals(s2), "Different service with same values not equal")
+    def test_not_equals(self):
+        self.service1.created = 3456
+        self.assertFalse(self.service1 == self.service2,
+                         "Services with different base values are equal")
 
-  def test_equals_with_same(self):
-    self.assertTrue(s.equals(s), "Same service are not equal")
+    def test_equal_diff_name(self):
+        self.service2.name = "foo"
+        self.assertFalse(self.service1 == self.service2,
+                         "Services with different names values are equal")
 
-  def test_not_equals(self):
-    s.set_created(3456_l)
-    self.assertFalse(s.equals(s2), "Services with different base values are equal")
+    def test_equal_diff_op_state(self):
+        self.service2.operatingState = operating_state.OperatingState.DISABLED
+        self.assertFalse(self.service1 == self.service2,
+                         "Services with different op state values are equal")
 
-  def test_equal_with_different_name(self):
-    s2.set_name("foo")
-    self.assertFalse(s.equals(s2), "Services with different names values are equal")
+    def test_equal_diff_addressable(self):
+        address2 = addressable.Addressable(self.TEST_PROTOCOL, self.TEST_ADDRESS, self.TEST_PATH,
+                                           self.TEST_PORT, "foo")
+        self.service2.addressable = address2
+        self.assertFalse(self.service1 == self.service2,
+                         "Services with different addressable are equal")
 
-  def test_equal_with_different_op_state(self):
-    s2.set_operating_state(Operating_state.DISABLED)
-    self.assertFalse(s.equals(s2), "Services with different op state values are equal")
+    def test_equal_diff_last_connected(self):
+        self.service2.lastConnected = 5678
+        self.assertFalse(self.service1 == self.service2,
+                         "Services with different last connected values are equal")
 
-  def test_equal_with_different_addressable(self):
-    Addressable a2 = new Addressable(self.TEST_PROTOCOL, self.TEST_ADDRESS, self.TEST_PATH, self.TEST_PORT, "foo")
-    s2.set_addressable(a2)
-    self.assertFalse(s.equals(s2), "Services with different addressable are equal")
+    def test_equal_diff_last_reported(self):
+        self.service2.lastReported = 5678
+        self.assertFalse(self.service1 == self.service2,
+                         "Services with different last reported values are equal")
 
-  def test_equal_wit_different_last_connected(self):
-    s2.set_last_connected(5678_l)
-    self.assertFalse(s.equals(s2), "Services with different last connected values are equal")
+    def test_equals_diff_labels(self):
+        new_labels = ["newlabel"]
+        self.service2.labels = new_labels
+        self.assertFalse(self.service1 == self.service2,
+                         "Services with different labels seen as equal")
 
-  def test_equal_wit_different_last_reported(self):
-    s2.set_last_reported(5678_l)
-    self.assertFalse(s.equals(s2), "Services with different last reported values are equal")
+    def test_hash_code(self):
+        self.assertTrue(self.service1.__hash__() != 0, "hashcode not hashing properly")
 
-  def test_equals_with_differnt_labels(self):
-    String[] new_labels = {"newlabel"}
-    s2.set_labels(new_labels)
-    self.assertFalse(s.equals(s2), "Services with different labels seen as equal")
-
-  def test_hash_code(self):
-    self.assertTrue(s.hash_code() != 0, "hashcode not hashing properly")
-
-}
+if __name__ == "__main__":
+    unittest.main()

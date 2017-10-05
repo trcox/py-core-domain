@@ -18,6 +18,8 @@
 
 from domain.common import base_object
 
+# pylint: disable=C0103
+
 
 class Schedule(base_object.BaseObject):
 
