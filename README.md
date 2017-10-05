@@ -10,4 +10,4 @@ Run unit tests with `python -m unittest discover`
 
 Uses Google Python Style Guide (https://google.github.io/styleguide/pyguide.html).
 
-Check compliance with `pylint domain.core domain.common test.domain.core test.domain.core`
+Check compliance with `pylint domain.core domain.common domain.meta test.domain.core test.domain.core test.domain.meta`
