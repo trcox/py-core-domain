@@ -49,13 +49,13 @@ class BaseObject(object):
 
     # Method for hashing unhashable attribute values
     def __hash__helper__(self):
-        temp = self
+        temp = {}
         for item in list(self.__dict__):
             if not isinstance(getattr(self, item), collections.Hashable):
-                for i, element in enumerate(getattr(temp, item)):
-                    setattr(temp, "%s%s" % (item, i), element)
-                setattr(temp, item, None)
-        return temp
+                temp[str(item)] = tuple(getattr(self, item))
+            else:
+                temp[str(item)] = getattr(self, item)
+        return hash(tuple(sorted(temp.items())))
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__,
